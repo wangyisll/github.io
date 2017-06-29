@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（二十）-装饰模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="装饰模式也叫做包装模式，是结构型设计模式之一。目的是为了给一个类或对象增加行为。可以是继承的一种替代。 装饰模式也很好理解，比如一个人，给他装上火箭就能上天了，装上潜水服就能下海了，但本身还是个人，人没有任何变化。 定义动态地给一个对象添加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（二十）-装饰模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/04/09/Android设计模式（二十）-装饰模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="装饰模式也叫做包装模式，是结构型设计模式之一。目的是为了给一个类或对象增加行为。可以是继承的一种替代。 装饰模式也很好理解，比如一个人，给他装上火箭就能上天了，装上潜水服就能下海了，但本身还是个人，人没有任何变化。 定义动态地给一个对象添加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshiuml.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshishuchu1.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshishuchu2.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengactivity.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengservice.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengapplication.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/context.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（二十）-装饰模式">
+<meta name="twitter:description" content="装饰模式也叫做包装模式，是结构型设计模式之一。目的是为了给一个类或对象增加行为。可以是继承的一种替代。 装饰模式也很好理解，比如一个人，给他装上火箭就能上天了，装上潜水服就能下海了，但本身还是个人，人没有任何变化。 定义动态地给一个对象添加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshiuml.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（二十）-装饰模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/09/Android设计模式（二十）-装饰模式/" class="article-date">
+  <time datetime="2017-04-09T12:31:55.000Z" itemprop="datePublished">2017-04-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（二十）-装饰模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>装饰模式也叫做包装模式，是结构型设计模式之一。目的是为了给一个类或对象增加行为。可以是继承的一种替代。</p>
+<p>装饰模式也很好理解，比如一个人，给他装上火箭就能上天了，装上潜水服就能下海了，但本身还是个人，人没有任何变化。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>动态地给一个对象添加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。<br><a id="more"></a></p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>需要拓展一个类的功能，增加附加职责时。</li>
+<li>需要动态增加功能，并动态删除功能时。</li>
+<li>当不能使用继承，但要提供继承的功能时。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshiuml.png" alt=""></p>
+<ul>
+<li>Component:抽象组件，可以是一个接口或抽象类，是被装饰的原始对象</li>
+<li>ConcreteComponent：组件的具体实现类。是被装饰的具体对象。</li>
+<li>Decorator：抽象的装饰者。职责是装饰被装饰的对象。内部一定有一个对被装饰者的引用。一般情况下也是一个抽象类，根据具体逻辑实现不同的子类。如果逻辑简单可以直接是实现类。</li>
+<li>ConcreteDecoratorA，B：具体的装饰者。</li>
+</ul>
+<p>先抽象组件类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Component &#123;</div><div class="line">    public abstract void operate();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>组件的一个具体实现类，也就是被装饰者者：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcreteComponent</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"被装饰者的操作"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象的装饰者，持有一个被装饰者的引用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Decorator</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Component component;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Decorator</span><span class="params">(Component component)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.component = component;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operate</span><span class="params">()</span> </span>&#123;</div><div class="line">        component.operate();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>具体的两个装饰者，拓展功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class ConcreteDecoratorA extends Decorator &#123;</div><div class="line">    public ConcreteDecoratorA(Component component) &#123;</div><div class="line">        super(component);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void operate() &#123;</div><div class="line">        operateA();</div><div class="line">        super.operate();</div><div class="line">        operateB();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void operateA()&#123;</div><div class="line">        System.out.println(&quot;装饰者A在被装饰者的操作之前加些操作&quot;);</div><div class="line">    &#125;</div><div class="line">    private void operateB()&#123;</div><div class="line">        System.out.println(&quot;装饰者A在被装饰者的操作之前后加些操作&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ConcreteDecoratorB extends Decorator &#123;</div><div class="line">    public ConcreteDecoratorB(Component component) &#123;</div><div class="line">        super(component);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void operate() &#123;</div><div class="line">        operateA();</div><div class="line">        super.operate();</div><div class="line">        operateB();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void operateA()&#123;</div><div class="line">        System.out.println(&quot;装饰者B在被装饰者的操作之前加些操作&quot;);</div><div class="line">    &#125;</div><div class="line">    private void operateB()&#123;</div><div class="line">        System.out.println(&quot;装饰者B在被装饰者的操作之前后加些操作&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Component component = new ConcreteComponent();</div><div class="line">        ConcreteDecoratorA concreteDecoratorA = new ConcreteDecoratorA(component);</div><div class="line">        ConcreteDecoratorB concreteDecoratorB = new ConcreteDecoratorB(component);</div><div class="line"></div><div class="line">        concreteDecoratorA.operate();</div><div class="line">        concreteDecoratorB.operate();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshishuchu1.png" alt=""></p>
+<p>装饰类并没有在原来的类上做审核改动，只是拓展了一些操作。通过不同的包装类就能拓展不同的功能。而传入不同的被包装类，也能拓展不同的具体对象。</p>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>拿一开始说的那个人为例子。人是个抽象的概念。男孩是个具体的人。但是这个人要干不同的事情要穿不一样的衣服，就需要进行不同的包装。</p>
+<p>抽象的人:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Person &#123;</div><div class="line">    public abstract void dress();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的人,也是原始的人，被装饰者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class Boy extends Person &#123;</div><div class="line">    @Override</div><div class="line">    public void dress() &#123;</div><div class="line">        System.out.println(&quot;穿内衣内裤&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象的装饰者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public abstract class PersonDecorator &#123;</div><div class="line">    Person person;</div><div class="line"></div><div class="line">    public PersonDecorator(Person person) &#123;</div><div class="line">        this.person = person;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void dress()&#123;</div><div class="line">        person.dress();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>工作人装饰者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class WorkPersonDecorator extends PersonDecorator &#123;</div><div class="line">    public WorkPersonDecorator(Person person) &#123;</div><div class="line">        super(person);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void dress() &#123;</div><div class="line">        super.dress();</div><div class="line">        dressWork();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void dressWork()&#123;</div><div class="line">        System.out.println(&quot;穿西装领带&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>运动的人装饰者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class SportPersonDecorator extends PersonDecorator &#123;</div><div class="line">    public SportPersonDecorator(Person person) &#123;</div><div class="line">        super(person);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void dress() &#123;</div><div class="line">        super.dress();</div><div class="line">        dressSport();</div><div class="line">    &#125;</div><div class="line">    private void dressSport()&#123;</div><div class="line">        System.out.println(&quot;穿运动衣&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Person boy = new Boy();</div><div class="line">        System.out.println(&quot;包装一个上班人：&quot;);</div><div class="line">        WorkPersonDecorator workPersonDecorator = new WorkPersonDecorator(boy);</div><div class="line">        workPersonDecorator.dress();</div><div class="line">        System.out.println(&quot;包装一个运动的人：&quot;);</div><div class="line">        SportPersonDecorator sportPersonDecorator = new SportPersonDecorator(boy);</div><div class="line">        sportPersonDecorator.dress();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zhuangshishuchu2.png" alt=""></p>
+<h1 id="Android中的装饰者模式"><a href="#Android中的装饰者模式" class="headerlink" title="Android中的装饰者模式"></a>Android中的装饰者模式</h1><p>经常使用的Context其实用的就是包装模式：</p>
+<p>先看一下他们的继承关系：</p>
+<p>Activity的：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengactivity.png" alt=""></p>
+<p>然后是service的：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengservice.png" alt=""></p>
+<p>然后是application的:</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/jichengapplication.png" alt=""></p>
+<p>他们都继承了ContextWrapper类。根据这个名字就觉得这是一个装饰类。装饰类里面会持有一个被装饰者的引用，找一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">package android.content;</div><div class="line">public class ContextWrapper extends Context &#123;</div><div class="line">    Context mBase;</div><div class="line"></div><div class="line">    public ContextWrapper(Context base) &#123;</div><div class="line">        mBase = base;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected void attachBaseContext(Context base) &#123;</div><div class="line">        if (mBase != null) &#123;</div><div class="line">            throw new IllegalStateException(&quot;Base context already set&quot;);</div><div class="line">        &#125;</div><div class="line">        mBase = base;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public AssetManager getAssets() &#123;</div><div class="line">        return mBase.getAssets();</div><div class="line">    &#125;</div><div class="line">    //.......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>看到前面这两行就感觉找对了。有两种方法可以给mBase赋值。而且这个类的一切操作都像getAssets方法一样，调用的是mBase的方法。因此可以知道，传进来的mBase才是真正的执行者。</p>
+<p>接下来就找一下具体的被包装类是什么。</p>
+<p>在分析Activity的onCreate方法调用时，知道activity的创建是在ActivityThread的performLaunchActivity方法中的，再来看一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;</div><div class="line">        Activity activity = null;</div><div class="line">        try &#123;</div><div class="line">            //创建Activity</div><div class="line">            java.lang.ClassLoader cl = r.packageInfo.getClassLoader();</div><div class="line">            activity = mInstrumentation.newActivity(</div><div class="line">                    cl, component.getClassName(), r.intent);</div><div class="line">            StrictMode.incrementExpectedActivityCount(activity.getClass());</div><div class="line">            r.intent.setExtrasClassLoader(cl);</div><div class="line">            r.intent.prepareToEnterProcess();</div><div class="line">            if (r.state != null) &#123;</div><div class="line">                r.state.setClassLoader(cl);</div><div class="line">            &#125;</div><div class="line">        &#125; </div><div class="line">//......</div><div class="line">        try &#123;</div><div class="line">            Application app = r.packageInfo.makeApplication(false, mInstrumentation);</div><div class="line">            if (activity != null) &#123;</div><div class="line">                //创建Activity的Context</div><div class="line">                Context appContext = createBaseContextForActivity(r, activity);</div><div class="line">                //......</div><div class="line">                activity.attach(appContext, this, getInstrumentation(), r.token,</div><div class="line">                        r.ident, app, r.intent, r.activityInfo, title, r.parent,</div><div class="line">                        r.embeddedID, r.lastNonConfigurationInstances, config,</div><div class="line">                        r.referrer, r.voiceInteractor, window);</div><div class="line"></div><div class="line">                //......</div><div class="line">            &#125;</div><div class="line">            //......</div><div class="line">        &#125; </div><div class="line">        return activity;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>createBaseContextForActivity创建的是具体的Activity的Context，查看源码发现是ContextImpl：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">private Context createBaseContextForActivity(ActivityClientRecord r, final Activity activity) &#123;</div><div class="line">        //......这里创建的是ContextImpl。</div><div class="line">        ContextImpl appContext = ContextImpl.createActivityContext(</div><div class="line">                this, r.packageInfo, r.token, displayId, r.overrideConfig);</div><div class="line">        appContext.setOuterContext(activity);</div><div class="line">        Context baseContext = appContext;</div><div class="line">        //......</div><div class="line">        return baseContext;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>在performLaunchActivity通过createBaseContextForActivity拿到一个ContextImpl之后，会调用activity.attach方法,看这个方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">final void attach(Context context, ActivityThread aThread,</div><div class="line">            Instrumentation instr, IBinder token, int ident,</div><div class="line">            Application application, Intent intent, ActivityInfo info,</div><div class="line">            CharSequence title, Activity parent, String id,</div><div class="line">            NonConfigurationInstances lastNonConfigurationInstances,</div><div class="line">            Configuration config, String referrer, IVoiceInteractor voiceInteractor,</div><div class="line">            Window window) &#123;</div><div class="line">        attachBaseContext(context);</div><div class="line"></div><div class="line">        //......</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>都知道传进来的是前面获取的ContextImpl。</p>
+<p>然后调用Activity的父类ContextThemeWrapper的attachBaseContext方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    protected void attachBaseContext(Context newBase) &#123;</div><div class="line">        super.attachBaseContext(newBase);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>看他有调用了父类的方法，ContextThemeWrapper的父类就是ContextWrapper了，然后就回到了ContextWrapper。</p>
+<p>前面可以看到ContextWrapper刚好就有个attachBaseContext，给mBase赋值，因此可以说，至少在Activity上，ContextWrapper这个装饰类里面引用的具体被装饰类是ContextImpl。其实Application和Service的被装饰者也是ContextImpl。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">package android.app;</div><div class="line">class ContextImpl extends Context &#123;</div><div class="line">    //......</div><div class="line">    @Override</div><div class="line">    public AssetManager getAssets() &#123;</div><div class="line">        return getResources().getAssets();</div><div class="line">    &#125;</div><div class="line">    //......</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面就可以画出他们的关系了：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/context.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>装饰模式和前面的代理模式有点类似，容易把装饰模式看成代理模式。装饰模式是继承的一种替代方案，主要为所装饰的对象增强功能，动态的增加方法。而代理模式主要是为了控制对原有对象的访问权限，不对原有对象进行功能增强。</p>
+<p>我觉得两者的区别主要是使用目的的区别。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>是继承的一种替代方案，但是比继承要灵活的多，可以在运行时通过传入不同的被装饰器或不同的装饰器来达成不同的行为。</li>
+<li>增加新的被装饰类和装饰类很方便，而且不用修改原有代码。便于拓展。符合开闭原则。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>设计模式基本都有这个缺点，就是会生成额外的类，增加系统复杂度。</li>
+<li>由于装饰可以层层包装，交叉包装，如果包装的很深的话，调试排错会比较麻烦，也不容易理解。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/09/Android设计模式（二十）-装饰模式/" data-id="cj4hps3g6001kdsfyjurgbznf" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/10/Android设计模式（二十一）-享元模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（二十一）-享元模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/07/Android设计模式（十九）-适配器模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（十九）-适配器模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -3,14 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archieven: 2017/6 | 喵了个呜的小宇宙</title>
+  <title>AndroidStudio运行java的main方法 | 喵了个呜的小宇宙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="喵了个呜的小宇宙">
-<meta property="og:url" content="http://blog.miaolegewu.top/archives/2017/06/index.html">
+  <meta name="description" content="要做AndroidStudio上运行java的main方法很简单。 原文地址  http://blog.csdn.net/qq_25806863/article/details/71171321">
+<meta name="keywords" content="Android,工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidStudio运行java的main方法">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/05/04/AndroidStudio运行java的main方法/index.html">
 <meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="要做AndroidStudio上运行java的main方法很简单。 原文地址  http://blog.csdn.net/qq_25806863/article/details/71171321">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc3.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc4.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc5.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc6.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="喵了个呜的小宇宙">
+<meta name="twitter:title" content="AndroidStudio运行java的main方法">
+<meta name="twitter:description" content="要做AndroidStudio上运行java的main方法很简单。 原文地址  http://blog.csdn.net/qq_25806863/article/details/71171321">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc3.png">
   
     <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
   
@@ -59,115 +69,81 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/27/ADB常用命令/" class="archive-article-date">
-  <time datetime="2017-06-27T02:06:46.000Z" itemprop="datePublished">Jun 27</time>
+        <section id="main"><article id="post-AndroidStudio运行java的main方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/04/AndroidStudio运行java的main方法/" class="article-date">
+  <time datetime="2017-05-04T07:26:31.000Z" itemprop="datePublished">2017-05-04</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+    <h1 class="article-title" itemprop="name">
+      AndroidStudio运行java的main方法
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/23/Android解压中文乱码/" class="archive-article-date">
-  <time datetime="2017-06-23T08:40:32.000Z" itemprop="datePublished">Jun 23</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
-    </h1>
-  
+        <p>要做AndroidStudio上运行java的main方法很简单。</p>
+<p>原文地址  <a href="http://blog.csdn.net/qq_25806863/article/details/71171321" target="_blank" rel="external">http://blog.csdn.net/qq_25806863/article/details/71171321</a></p>
+<a id="more"></a>
+<ol>
+<li><p>直接新建一个java文件</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc3.png" alt=""></p>
+<p>​</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc4.png" alt=""></p>
+</li>
+<li><p>在java文件中写main方法，输入psvm就行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"ok"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>类文件上邮件，点击</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc5.png" alt=""></p>
+<p>就能看到打印出的OK</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc6.png" alt=""></p>
+<p>​</p>
+</li>
+</ol>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/23/通过轮廓简单实现一个圆图/" class="archive-article-date">
-  <time datetime="2017-06-23T07:26:13.000Z" itemprop="datePublished">Jun 23</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/" class="archive-article-date">
-  <time datetime="2017-06-15T03:32:48.000Z" itemprop="datePublished">Jun 15</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/05/04/AndroidStudio运行java的main方法/" data-id="cj4hps3f70005dsfy26oxd98q" class="article-share-link">Delen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/14/对一个KotlinAPP的copy/" class="archive-article-date">
-  <time datetime="2017-06-14T01:40:39.000Z" itemprop="datePublished">Jun 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工具/">工具</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/04/java多线程-ThreadPoolExecutor的拒绝策略/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          java多线程-ThreadPoolExecutor的拒绝策略
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/03/Java多线程-线程池Executors/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Java多线程-线程池Executors</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         

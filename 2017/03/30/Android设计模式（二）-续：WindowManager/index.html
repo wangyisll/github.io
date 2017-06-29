@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（二） 续：WindowManager | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="博客地址通过前面的分析可以知道，Android系统中，所有的界面内容显示都是通过Window来实现的，包括Activity，Dialog，Toast等。先初步分析一下Window，WindowManager，WindowManagerService的关系。 获取WindowManager从Android设计模式（一）-单例模式中后面的内容可以看到，系统在启动的时候就注册了许多服务。其中就有这样的代">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（二） 续：WindowManager">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/03/30/Android设计模式（二）-续：WindowManager/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="博客地址通过前面的分析可以知道，Android系统中，所有的界面内容显示都是通过Window来实现的，包括Activity，Dialog，Toast等。先初步分析一下Window，WindowManager，WindowManagerService的关系。 获取WindowManager从Android设计模式（一）-单例模式中后面的内容可以看到，系统在启动的时候就注册了许多服务。其中就有这样的代">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（二） 续：WindowManager">
+<meta name="twitter:description" content="博客地址通过前面的分析可以知道，Android系统中，所有的界面内容显示都是通过Window来实现的，包括Activity，Dialog，Toast等。先初步分析一下Window，WindowManager，WindowManagerService的关系。 获取WindowManager从Android设计模式（一）-单例模式中后面的内容可以看到，系统在启动的时候就注册了许多服务。其中就有这样的代">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（二）-续：WindowManager" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（二）-续：WindowManager/" class="article-date">
+  <time datetime="2017-03-30T12:48:06.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（二） 续：WindowManager
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://blog.csdn.net/qq_25806863/article/details/66530372" target="_blank" rel="external">博客地址</a><br>通过前面的分析可以知道，Android系统中，所有的界面内容显示都是通过Window来实现的，包括Activity，Dialog，Toast等。<br>先初步分析一下Window，WindowManager，WindowManagerService的关系。</p>
+<h1 id="获取WindowManager"><a href="#获取WindowManager" class="headerlink" title="获取WindowManager"></a>获取WindowManager</h1><p>从<a href="http://www.jianshu.com/p/0cdd78f01237" target="_blank" rel="external">Android设计模式（一）-单例模式</a>中后面的内容可以看到，系统在启动的时候就注册了许多服务。其中就有这样的代码：<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">package android.app;</div><div class="line">final class SystemServiceRegistry &#123;</div><div class="line">......</div><div class="line">    static &#123;</div><div class="line">......</div><div class="line">        registerService(Context.WINDOW_SERVICE, WindowManager.class,</div><div class="line">                new CachedServiceFetcher&lt;WindowManager&gt;() &#123;</div><div class="line">            @Override</div><div class="line">            public WindowManager createService(ContextImpl ctx) &#123;</div><div class="line">                return new WindowManagerImpl(ctx);</div><div class="line">            &#125;&#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样就创建了一个WindowManager，而且也能看出来WindowManager的实现类是WindowManagerImpl。<br>同理，要获得一个WindowManager也很简单了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">WindowManager manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);</div></pre></td></tr></table></figure></p>
+<h1 id="Dialog的显示"><a href="#Dialog的显示" class="headerlink" title="Dialog的显示"></a>Dialog的显示</h1><p>从头开始分析，先看AlertDialog的构造方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">AlertDialog(Context context, @StyleRes int themeResId, boolean createContextThemeWrapper) &#123;</div><div class="line">        super(context, createContextThemeWrapper ? resolveDialogTheme(context, themeResId) : 0,</div><div class="line">                createContextThemeWrapper);</div><div class="line"></div><div class="line">        mWindow.alwaysReadCloseOnTouchAttr();</div><div class="line">        mAlert = AlertController.create(getContext(), this, getWindow());</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>调用了父类Dialog的构造方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Dialog(@NonNull Context context, @StyleRes int themeResId, boolean createContextThemeWrapper) &#123;</div><div class="line">       ......</div><div class="line">//获取WindowManager</div><div class="line">        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);</div><div class="line">//创建一个PhonwWindow</div><div class="line">        final Window w = new PhoneWindow(mContext);</div><div class="line">        mWindow = w;</div><div class="line">//设置回调</div><div class="line">        w.setCallback(this);</div><div class="line">        w.setOnWindowDismissedCallback(this);</div><div class="line">//设置WindowManager</div><div class="line">        w.setWindowManager(mWindowManager, null, null);</div><div class="line">        w.setGravity(Gravity.CENTER);</div><div class="line">        mListenersHandler = new ListenersHandler(this);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>Window通过调用他的w.setWindowManager(mWindowManager, null, null)将WindowManager和Window联系起来。：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">package android.view;</div><div class="line">public abstract class Window &#123;</div><div class="line">        ......</div><div class="line">        public void setWindowManager(WindowManager wm, IBinder appToken, String appName,</div><div class="line">            boolean hardwareAccelerated) &#123;</div><div class="line">        ......</div><div class="line">        if (wm == null) &#123;</div><div class="line">            wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);</div><div class="line">        &#125;</div><div class="line">        mWindowManager = ((WindowManagerImpl)wm).createLocalWindowManager(this);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后一句代码很重要mWindowManager = ((WindowManagerImpl)wm).createLocalWindowManager(this);，调用了WindowManagerImpl的createLocalWindowManager方法，这个方法里就一行代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public WindowManagerImpl createLocalWindowManager(Window parentWindow) &#123;</div><div class="line">        return new WindowManagerImpl(mContext, parentWindow);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这里重新创建了一个WindowManagerImpl，但是参数比系统注册的时候多了一个构造参数parentWindow。这说明这个WindowManagerImpl是跟一个具体的Window绑定起来的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">package android.view;</div><div class="line">public final class WindowManagerImpl implements WindowManager &#123;</div><div class="line">    private final WindowManagerGlobal mGlobal = WindowManagerGlobal.getInstance();</div><div class="line">    private final Context mContext;</div><div class="line">    private final Window mParentWindow;</div><div class="line">......</div><div class="line">    private WindowManagerImpl(Context context, Window parentWindow) &#123;</div><div class="line">        mContext = context;</div><div class="line">        mParentWindow = parentWindow;</div><div class="line">    &#125;</div><div class="line">......</div><div class="line">    public void setDefaultToken(IBinder token) &#123;</div><div class="line">        mDefaultToken = token;</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void addView(@NonNull View view, @NonNull ViewGroup.LayoutParams params) &#123;</div><div class="line">        applyDefaultToken(params);</div><div class="line">        mGlobal.addView(view, params, mContext.getDisplay(), mParentWindow);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void updateViewLayout(@NonNull View view, @NonNull ViewGroup.LayoutParams params) &#123;</div><div class="line">        applyDefaultToken(params);</div><div class="line">        mGlobal.updateViewLayout(view, params);</div><div class="line">    &#125;</div><div class="line">    ......</div><div class="line">    @Override</div><div class="line">    public void removeView(View view) &#123;</div><div class="line">        mGlobal.removeView(view, false);</div><div class="line">    &#125;</div><div class="line">    @Override</div><div class="line">    public void removeViewImmediate(View view) &#123;</div><div class="line">        mGlobal.removeView(view, true);</div><div class="line">    &#125;</div><div class="line">......</div><div class="line">    @Override</div><div class="line">    public Display getDefaultDisplay() &#123;</div><div class="line">        return mContext.getDisplay();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>从中 很明显的可以看出真正实现一些关键方法如addview 、remoteView等方法的也不是WindowManagerImpl，而是在内部交给了WindowManagerGlobal，由WindowManagerGlobal来真正实现。</p>
+<p>然后看一下真正的addView吧：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">package android.view;</div><div class="line">public final class WindowManagerGlobal &#123;</div><div class="line">    private final ArrayList&lt;View&gt; mViews = new ArrayList&lt;View&gt;();</div><div class="line">    private final ArrayList&lt;ViewRootImpl&gt; mRoots = new ArrayList&lt;ViewRootImpl&gt;();</div><div class="line">    private final ArrayList&lt;WindowManager.LayoutParams&gt; mParams =</div><div class="line">            new ArrayList&lt;WindowManager.LayoutParams&gt;();</div><div class="line"></div><div class="line">    public void addView(View view, ViewGroup.LayoutParams params,</div><div class="line">            Display display, Window parentWindow) &#123;</div><div class="line">       ......</div><div class="line">        ViewRootImpl root;</div><div class="line">        View panelParentView = null;</div><div class="line">        synchronized (mLock) &#123;</div><div class="line">            ...... </div><div class="line">//创建ViewRootImpl</div><div class="line">            root = new ViewRootImpl(view.getContext(), display);</div><div class="line">            view.setLayoutParams(wparams);</div><div class="line">//添加到列表中</div><div class="line">            mViews.add(view);</div><div class="line">            mRoots.add(root);</div><div class="line">            mParams.add(wparams);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // 最后执行这个，将View显示在手机屏幕上</div><div class="line">        try &#123;</div><div class="line">            root.setView(view, wparams, panelParentView);</div><div class="line">        &#125; catch (RuntimeException e) &#123;</div><div class="line">          ......</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="ViewRootImpl"><a href="#ViewRootImpl" class="headerlink" title="ViewRootImpl"></a>ViewRootImpl</h2><h3 id="new-ViewRootImpl-view-getContext-display"><a href="#new-ViewRootImpl-view-getContext-display" class="headerlink" title="new ViewRootImpl(view.getContext(), display);"></a>new ViewRootImpl(view.getContext(), display);</h3><p>上面的方法中先是new了一个ViewRootImpl，然后调用他的setView来显示布局。<br>Android中的View都是通过ViewRootImpl来完成绘制的。</p>
+<p>书中说这个类继承Handler ,可能是以前是这样吧，我看的源码不是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">package android.view;</div><div class="line">public final class ViewRootImpl implements ViewParent,</div><div class="line">        View.AttachInfo.Callbacks, ThreadedRenderer.HardwareDrawCallbacks &#123;</div><div class="line">    public ViewRootImpl(Context context, Display display) &#123;</div><div class="line">        mContext = context;</div><div class="line">//获取IWindowSession，与WindowManagerService建立连接</div><div class="line">        mWindowSession = WindowManagerGlobal.getWindowSession();</div><div class="line">  ......</div><div class="line">//这里保存当前线程</div><div class="line">        mThread = Thread.currentThread();</div><div class="line">        ......</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>继续追踪WindowManagerGlobal.getWindowSession()：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">public static IWindowSession getWindowSession() &#123;</div><div class="line">        synchronized (WindowManagerGlobal.class) &#123;</div><div class="line">            if (sWindowSession == null) &#123;</div><div class="line">                try &#123;</div><div class="line">                    InputMethodManager imm = InputMethodManager.getInstance();</div><div class="line">//获取WindowManagerService</div><div class="line">                    IWindowManager windowManager = getWindowManagerService();</div><div class="line">//与系统的WindowManagerService建立一个IWindowSession</div><div class="line">                    sWindowSession = windowManager.openSession(</div><div class="line">                            new IWindowSessionCallback.Stub() &#123;</div><div class="line">                                @Override</div><div class="line">                                public void onAnimatorScaleChanged(float scale) &#123;</div><div class="line">                                    ValueAnimator.setDurationScale(scale);</div><div class="line">                                &#125;</div><div class="line">                            &#125;,</div><div class="line">                            imm.getClient(), imm.getInputContext());</div><div class="line">                &#125; catch (RemoteException e) &#123;</div><div class="line">                    throw e.rethrowFromSystemServer();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            return sWindowSession;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">public static IWindowManager getWindowManagerService() &#123;</div><div class="line">        synchronized (WindowManagerGlobal.class) &#123;</div><div class="line">            if (sWindowManagerService == null) &#123;</div><div class="line">//这里返回的是IBinder对象，进行IPC通信</div><div class="line">                sWindowManagerService = IWindowManager.Stub.asInterface(</div><div class="line">                        ServiceManager.getService(&quot;window&quot;));</div><div class="line">               ......</div><div class="line">            &#125;</div><div class="line">            return sWindowManagerService;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>继续看 sWindowManagerService = IWindowManager.Stub.asInterface(<br>                        ServiceManager.getService(“window”));这行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package android.os;</div><div class="line">public final class ServiceManager &#123;</div><div class="line">    public static IBinder getService(String name) &#123;</div><div class="line">        try &#123;</div><div class="line">            IBinder service = sCache.get(name);</div><div class="line">            if (service != null) &#123;</div><div class="line">                return service;</div><div class="line">            &#125; else &#123;</div><div class="line">                return getIServiceManager().getService(name);</div><div class="line">            &#125;</div><div class="line">        &#125; catch (RemoteException e) &#123;</div><div class="line">            Log.e(TAG, &quot;error in getService&quot;, e);</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>所以IWindowManager.Stub.asInterface(<br>                        ServiceManager.getService(“window”));得到的是一个IBinder对象。</p>
+<p>到这里，在ServiceManager的getService方法中通过getIServiceManager().getService(“window”)获取到一个IBinder，与WMS建立初步连接。<br>然后通过IWindowManager.Stub.asInterface方法将IBinder转换成IWindowManager对象。<br>通过这个对象调用openSession打开一个Session，实现通话。</p>
+<p>但是，WMS只负责管理View的z-order，也就是管理当前那个View在最上层显示，并不管理绘制。</p>
+<h3 id="setView-view-wparams-panelParentView"><a href="#setView-view-wparams-panelParentView" class="headerlink" title="setView(view, wparams, panelParentView);"></a>setView(view, wparams, panelParentView);</h3><p>既然addView就肯定要把view显示在屏幕上，那么绘制View的任务就在ViewRootImpl的setView方法中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public void setView(View view, WindowManager.LayoutParams attrs, View panelParentView) &#123;</div><div class="line">        synchronized (this) &#123;</div><div class="line">            ......</div><div class="line">//请求绘制View</div><div class="line">            requestLayout();</div><div class="line">            ......</div><div class="line">            int res; /* = WindowManagerImpl.ADD_OKAY; */</div><div class="line">            try &#123;</div><div class="line">                   ......</div><div class="line">//请求WindowManagerService，让WMS实现Window的添加。</div><div class="line">                    res = mWindowSession.addToDisplay(mWindow, mSeq, mWindowAttributes,</div><div class="line">                            getHostVisibility(), mDisplay.getDisplayId(),</div><div class="line">                            mAttachInfo.mContentInsets, mAttachInfo.mStableInsets,</div><div class="line">                            mAttachInfo.mOutsets, mInputChannel);</div><div class="line">                &#125; </div><div class="line">              ......</div><div class="line">       &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>setView主要做了两件事：<br>（1）requestLayout();<br>（2）向WMS请求添加Window；</p>
+<h4 id="requestLayout"><a href="#requestLayout" class="headerlink" title="requestLayout();"></a>requestLayout();</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void requestLayout() &#123;</div><div class="line">        if (!mHandlingLayoutInLayoutRequest) &#123;</div><div class="line">            checkThread();</div><div class="line">            mLayoutRequested = true;</div><div class="line">            scheduleTraversals();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p><strong>这里我另外注意一下checkThread()这个方法。</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">void checkThread() &#123;</div><div class="line">        if (mThread != Thread.currentThread()) &#123;</div><div class="line">            throw new CalledFromWrongThreadException(</div><div class="line">                    &quot;Only the original thread that created a view hierarchy can touch its views.&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>是不是看到了熟悉的异常提示？这个方法要判断当前更新UI 的线程是不是创建ViewRootImpl时的线程，只有在创建ViewRootImpl的线程中更新对应的UI才不会报错。所以不能在子线程中更新UI也是这个原因。</p>
+<p>回到requestLayout()，查看scheduleTraversals();<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">void scheduleTraversals() &#123;</div><div class="line">        if (!mTraversalScheduled) &#123;</div><div class="line">            ......</div><div class="line">            mChoreographer.postCallback(</div><div class="line">                    Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);</div><div class="line">           ......</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>这里的mTraversalRunnable是个Runnable对象，mChoreographer.postCallback最终会通过一个handler把这个任务发送出去：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">final class TraversalRunnable implements Runnable &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            doTraversal();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>看doTraversal();<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">void doTraversal() &#123;</div><div class="line">        if (mTraversalScheduled) &#123;</div><div class="line">            mTraversalScheduled = false;</div><div class="line">            mHandler.getLooper().getQueue().removeSyncBarrier(mTraversalBarrier);</div><div class="line">......</div><div class="line">            performTraversals();</div><div class="line">......</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>看performTraversals();<br>这个方法里将近一千行代码,大致是四个过程：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">private void performTraversals()&#123;</div><div class="line">  // 1 获取Surface对象，用于图形绘制</div><div class="line">  //2 测量整个视图树中各个View的大小，用performMeasure方法</div><div class="line">  //3 布局整个视图树，用performLayout方法</div><div class="line">  //4 绘制整个视图树，用performDraw方法</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在第四步中，performDraw方法里会调用ViewRootImpl的draw()方法。</p>
+<p>draw()中获取到绘制表面Surface，里面最后调用ViewRootImpl的drawSoftware方法，调用GPU绘图。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">private boolean drawSoftware(Surface surface, AttachInfo attachInfo, int xoff, int yoff,</div><div class="line">            boolean scalingRequired, Rect dirty) &#123;</div><div class="line">        final Canvas canvas;</div><div class="line">        try &#123;</div><div class="line">//获取canvas</div><div class="line">            canvas = mSurface.lockCanvas(dirty);</div><div class="line"></div><div class="line">            // TODO: Do this in native</div><div class="line">            canvas.setDensity(mDensity);</div><div class="line">        &#125; catch (Surface.OutOfResourcesException e) &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        try &#123;</div><div class="line">            if (!canvas.isOpaque() || yoff != 0 || xoff != 0) &#123;</div><div class="line">                canvas.drawColor(0, PorterDuff.Mode.CLEAR);</div><div class="line">            &#125;</div><div class="line">            try &#123;</div><div class="line">                ......</div><div class="line">//从这里开始绘制整个视图树，从DecorView开始</div><div class="line">                mView.draw(canvas);</div><div class="line">            &#125; finally &#123;</div><div class="line">                ......</div><div class="line">            &#125;</div><div class="line">        &#125; finally &#123;</div><div class="line">            try &#123;</div><div class="line">//解锁canvas，并通知SurfaceFlinger更新这块区域。</div><div class="line">                surface.unlockCanvasAndPost(canvas);</div><div class="line">            &#125; catch (IllegalArgumentException e) &#123;</div><div class="line">              ......</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        return true;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>综上所述，视图树的绘制主要有以下步骤：<br>（1）判断使用CPU还是GPU绘制<br>（2）获取绘制表面Surface对象<br>（3）通过Surface对象获取并锁住绘图对象<br>（4）从DecorView开始绘制整个视图树<br>（5）解锁Canvas，并通知SurfaceFlinger更新这块区域。</p>
+<h1 id="注意Dialog的使用，系统级弹窗"><a href="#注意Dialog的使用，系统级弹窗" class="headerlink" title="注意Dialog的使用，系统级弹窗"></a>注意Dialog的使用，系统级弹窗</h1><p>在创建AlertDialog时，如果传入的Context是ApplicationContext而不是Activity的Context，那么抛出一个异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Caused by: android.view.WindowManager$BadTokenException: Unable to add window -- token null is not for an application</div><div class="line">                                                                              at android.view.ViewRootImpl.setView(ViewRootImpl.java:583)</div><div class="line">                                                                              at android.view.WindowManagerGlobal.addView(WindowManagerGlobal.java:313)</div><div class="line">                                                                              at android.view.WindowManagerImpl.addView(WindowManagerImpl.java:86)</div></pre></td></tr></table></figure></p>
+<p>看出出错的地方是ViewRootImpl中的setView方法中。在这个方法中，调用mWindowSession.addToDisplay发送添加View的请求后会返回一个数值。<br>然后对这个数值进行判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">int res; </div><div class="line">res = mWindowSession.addToDisplay(mWindow, mSeq, mWindowAttributes,</div><div class="line">                            getHostVisibility(), mDisplay.getDisplayId(),</div><div class="line">                            mAttachInfo.mContentInsets, mAttachInfo.mStableInsets,</div><div class="line">                            mAttachInfo.mOutsets, mInputChannel);</div><div class="line">if (res &lt; WindowManagerGlobal.ADD_OKAY) &#123;</div><div class="line">                    mAttachInfo.mRootView = null;</div><div class="line">                    mAdded = false;</div><div class="line">                    mFallbackEventHandler.setView(null);</div><div class="line">                    unscheduleTraversals();</div><div class="line">                    setAccessibilityFocus(null, null);</div><div class="line">                    switch (res) &#123;</div><div class="line">                        case WindowManagerGlobal.ADD_BAD_APP_TOKEN:</div><div class="line">                        case WindowManagerGlobal.ADD_BAD_SUBWINDOW_TOKEN:</div><div class="line">                            throw new WindowManager.BadTokenException(</div><div class="line">                                    &quot;Unable to add window -- token &quot; + attrs.token</div><div class="line">                                    + &quot; is not valid; is your activity running?&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_NOT_APP_TOKEN:</div><div class="line">                            throw new WindowManager.BadTokenException(</div><div class="line">                                    &quot;Unable to add window -- token &quot; + attrs.token</div><div class="line">                                    + &quot; is not for an application&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_APP_EXITING:</div><div class="line">                            throw new WindowManager.BadTokenException(</div><div class="line">                                    &quot;Unable to add window -- app for token &quot; + attrs.token</div><div class="line">                                    + &quot; is exiting&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_DUPLICATE_ADD:</div><div class="line">                            throw new WindowManager.BadTokenException(</div><div class="line">                                    &quot;Unable to add window -- window &quot; + mWindow</div><div class="line">                                    + &quot; has already been added&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_STARTING_NOT_NEEDED:</div><div class="line">                            // Silently ignore -- we would have just removed it</div><div class="line">                            // right away, anyway.</div><div class="line">                            return;</div><div class="line">                        case WindowManagerGlobal.ADD_MULTIPLE_SINGLETON:</div><div class="line">                            throw new WindowManager.BadTokenException(&quot;Unable to add window &quot;</div><div class="line">                                    + mWindow + &quot; -- another window of type &quot;</div><div class="line">                                    + mWindowAttributes.type + &quot; already exists&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_PERMISSION_DENIED:</div><div class="line">                            throw new WindowManager.BadTokenException(&quot;Unable to add window &quot;</div><div class="line">                                    + mWindow + &quot; -- permission denied for window type &quot;</div><div class="line">                                    + mWindowAttributes.type);</div><div class="line">                        case WindowManagerGlobal.ADD_INVALID_DISPLAY:</div><div class="line">                            throw new WindowManager.InvalidDisplayException(&quot;Unable to add window &quot;</div><div class="line">                                    + mWindow + &quot; -- the specified display can not be found&quot;);</div><div class="line">                        case WindowManagerGlobal.ADD_INVALID_TYPE:</div><div class="line">                            throw new WindowManager.InvalidDisplayException(&quot;Unable to add window &quot;</div><div class="line">                                    + mWindow + &quot; -- the specified window type &quot;</div><div class="line">                                    + mWindowAttributes.type + &quot; is not valid&quot;);</div><div class="line">                    &#125;</div><div class="line">                    throw new RuntimeException(</div><div class="line">                            &quot;Unable to add window -- unknown error code &quot; + res);</div><div class="line">                &#125;</div></pre></td></tr></table></figure></p>
+<p>通过异常提示可以看出，异常的原因是应用没有token造成的。而token一般只有activity才有，所以要传入activity的context才行。</p>
+<p>有一个特殊的对话框不需要传入activity，那就是系统对话框。不传入activity的context也能正常弹出系统对话框。<br>使用过程：</p>
+<ul>
+<li><p>在AndroidManifest.xml中加上权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;uses-permission android:name=&quot;android.permission.SYSTEM_ALERT_WINDOW&quot;/&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>然后在调用dialog.show()之前加上下面一句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>系统的type有很多都可以用，TYPE_SYSTEM_ERROR，TYPE_SYSTEM_OVERLAY都可以。</p>
+<ul>
+<li><strong>有些手机需要对这个应用开启悬浮窗权限才能看见这个应用弹出的系统级对话框。</strong></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（二）-续：WindowManager/" data-id="cj4hps3gb001pdsfyonw6h6jc" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/30/Android设计模式（三）-原型模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（三）- 原型模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/30/Android设计模式（二）-Builder模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（二）- Builder模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

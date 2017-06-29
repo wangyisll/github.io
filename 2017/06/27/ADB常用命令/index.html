@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archieven: 2017/6 | 喵了个呜的小宇宙</title>
+  <title>ADB常用命令 | 喵了个呜的小宇宙</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="喵了个呜的小宇宙">
-<meta property="og:url" content="http://blog.miaolegewu.top/archives/2017/06/index.html">
+  <meta name="description" content="一些用过的ADB命令，有些需要root。 可以直接在终端中输入使用。 也可以在APP中使用。 点击 x=600 y=600adb shell input tap 600 600 长按 x=600 y=600adb shell input touchscreen swipe 600 600 600 600 2000 滑动 从(500,500)滑动到(700,500)adb shell input s">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ADB常用命令">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/06/27/ADB常用命令/index.html">
 <meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="一些用过的ADB命令，有些需要root。 可以直接在终端中输入使用。 也可以在APP中使用。 点击 x=600 y=600adb shell input tap 600 600 长按 x=600 y=600adb shell input touchscreen swipe 600 600 600 600 2000 滑动 从(500,500)滑动到(700,500)adb shell input s">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="喵了个呜的小宇宙">
+<meta name="twitter:title" content="ADB常用命令">
+<meta name="twitter:description" content="一些用过的ADB命令，有些需要root。 可以直接在终端中输入使用。 也可以在APP中使用。 点击 x=600 y=600adb shell input tap 600 600 长按 x=600 y=600adb shell input touchscreen swipe 600 600 600 600 2000 滑动 从(500,500)滑动到(700,500)adb shell input s">
   
     <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
   
@@ -59,115 +64,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/27/ADB常用命令/" class="archive-article-date">
-  <time datetime="2017-06-27T02:06:46.000Z" itemprop="datePublished">Jun 27</time>
+        <section id="main"><article id="post-ADB常用命令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/27/ADB常用命令/" class="article-date">
+  <time datetime="2017-06-27T02:06:46.000Z" itemprop="datePublished">2017-06-27</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+    <h1 class="article-title" itemprop="name">
+      ADB常用命令
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/23/Android解压中文乱码/" class="archive-article-date">
-  <time datetime="2017-06-23T08:40:32.000Z" itemprop="datePublished">Jun 23</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
-    </h1>
-  
+        <p>一些用过的ADB命令，有些需要root。</p>
+<p>可以直接在终端中输入使用。</p>
+<p>也可以在APP中使用。</p>
+<h1 id="点击-x-600-y-600"><a href="#点击-x-600-y-600" class="headerlink" title="点击 x=600 y=600"></a>点击 x=600 y=600</h1><p><code>adb shell input tap 600 600</code></p>
+<h1 id="长按-x-600-y-600"><a href="#长按-x-600-y-600" class="headerlink" title="长按 x=600 y=600"></a>长按 x=600 y=600</h1><p><code>adb shell input touchscreen swipe 600 600 600 600 2000</code></p>
+<h1 id="滑动-从-500-500-滑动到-700-500"><a href="#滑动-从-500-500-滑动到-700-500" class="headerlink" title="滑动 从(500,500)滑动到(700,500)"></a>滑动 从(500,500)滑动到(700,500)</h1><p><code>adb shell input swipe 500 500 700 500</code></p>
+<h1 id="查看apk的包名和启动页面名"><a href="#查看apk的包名和启动页面名" class="headerlink" title="查看apk的包名和启动页面名"></a>查看apk的包名和启动页面名</h1><p><code>aapt dump badging xx.apk</code></p>
+<h1 id="查看手机启动的Activity和页面启动时间"><a href="#查看手机启动的Activity和页面启动时间" class="headerlink" title="查看手机启动的Activity和页面启动时间"></a>查看手机启动的Activity和页面启动时间</h1><p><code>adb logcat -v time -s ActivityManager</code></p>
+<p>比如打开设置页面，终端中会打印：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">06-27 10:20:11.401 I/ActivityManager(  840): START u0 &#123;act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.settings/com.oppo.settings.SettingsActivity&#125; from pid 1655</div><div class="line"></div><div class="line">06-27 10:20:11.401 E/ActivityManager(  840): START &#123;act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.settings/com.oppo.settings.SettingsActivity u=0&#125; from pid 1655</div><div class="line"></div><div class="line">06-27 10:20:11.711 I/ActivityManager(  840): Displayed com.android.settings/com.oppo.settings.SettingsActivity: +93ms (total +6s60ms)</div></pre></td></tr></table></figure>
+<h1 id="启动页面"><a href="#启动页面" class="headerlink" title="启动页面"></a>启动页面</h1><p>如上面的页面 <code>com.android.settings/com.oppo.settings.SettingsActivity</code></p>
+<p><code>adb shell am start com.android.settings/com.oppo.settings.SettingsActivity</code></p>
+<h1 id="通过包名卸载程序"><a href="#通过包名卸载程序" class="headerlink" title="通过包名卸载程序"></a>通过包名卸载程序</h1><p><code>adb shell pm uninstall com.xxx.xxx</code></p>
+<h2 id="通过adb-无线调试真机"><a href="#通过adb-无线调试真机" class="headerlink" title="通过adb 无线调试真机"></a>通过adb 无线调试真机</h2><ul>
+<li>连USB线 <code>adb tcpip 5555</code></li>
+<li>可以拔线 <code>adb connect xxx.xxx.x.xx</code>   xxx.xxx.x.xx是手机ip。可以调试了</li>
+<li>断开： <code>adb disconnect</code></li>
+<li>或切换USB <code>adb usb</code></li>
+</ul>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/23/通过轮廓简单实现一个圆图/" class="archive-article-date">
-  <time datetime="2017-06-23T07:26:13.000Z" itemprop="datePublished">Jun 23</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/" class="archive-article-date">
-  <time datetime="2017-06-15T03:32:48.000Z" itemprop="datePublished">Jun 15</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/06/27/ADB常用命令/" data-id="cj4hps3f20003dsfyoywu6rxx" class="article-share-link">Delen</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/06/14/对一个KotlinAPP的copy/" class="archive-article-date">
-  <time datetime="2017-06-14T01:40:39.000Z" itemprop="datePublished">Jun 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
-    </h1>
-  
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
 
-    </header>
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/23/Android解压中文乱码/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android解压中文乱码</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         

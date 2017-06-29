@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（二十三）-桥接模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="桥接模式也叫桥梁模式，和生活中一样，桥梁就是用来连接河道两岸的主要建筑。桥接模式也是起着连接两边的作用，连接的两边就是抽象部分和实现部分，这就需要在程序设计的时候划分好抽象部分和实现部分了。 定义将抽象部分与实现部分分离，使他们都可以独立地进行变化。">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（二十三）-桥接模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/04/11/Android设计模式（二十三）-桥接模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="桥接模式也叫桥梁模式，和生活中一样，桥梁就是用来连接河道两岸的主要建筑。桥接模式也是起着连接两边的作用，连接的两边就是抽象部分和实现部分，这就需要在程序设计的时候划分好抽象部分和实现部分了。 定义将抽象部分与实现部分分离，使他们都可以独立地进行变化。">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieuml.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieshuchu1.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieshuchu2.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（二十三）-桥接模式">
+<meta name="twitter:description" content="桥接模式也叫桥梁模式，和生活中一样，桥梁就是用来连接河道两岸的主要建筑。桥接模式也是起着连接两边的作用，连接的两边就是抽象部分和实现部分，这就需要在程序设计的时候划分好抽象部分和实现部分了。 定义将抽象部分与实现部分分离，使他们都可以独立地进行变化。">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieuml.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（二十三）-桥接模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/11/Android设计模式（二十三）-桥接模式/" class="article-date">
+  <time datetime="2017-04-11T00:37:38.000Z" itemprop="datePublished">2017-04-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（二十三）-桥接模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>桥接模式也叫桥梁模式，和生活中一样，桥梁就是用来连接河道两岸的主要建筑。桥接模式也是起着连接两边的作用，连接的两边就是抽象部分和实现部分，这就需要在程序设计的时候划分好抽象部分和实现部分了。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>将抽象部分与实现部分分离，使他们都可以独立地进行变化。<br><a id="more"></a></p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>一个类存在两个独立维度的变化，且两个维度都需要进行拓展。</li>
+<li>一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性，避免两个层次之间建立静态的继承联系，可以用桥接模式使他们在抽象层建立一个关联关系。</li>
+<li>不想使用继承或使用继承会导致生成一大堆类的时候。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieuml.png" alt=""></p>
+<ul>
+<li>Abstraction: 抽象部分，抽象部分保持对实现部分的引用，抽象部分的方法要调用实现部分的对象来实现。一般为抽象类。</li>
+<li>RefinedAbstraction: 优化的抽象部分，一般是对抽象部分的方法进行完善和拓展，是抽象部分的具体实现</li>
+<li>Implementor：实现部分，可以是接口和抽象类，方法不一定要和抽象部分保持一致。一般情况下由实现部分提供基本的操作，而抽象部分定义基于这些操作的业务方法。</li>
+<li>ConcreteImplementorA,B: 具体的实现部分。</li>
+</ul>
+<p>模板代码：</p>
+<p>实现部分的接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface Implementor&#123;</div><div class="line">    void operationImpl();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的实现部分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class ConcreteImplementorA implements  Implementor&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void operationImpl() &#123;</div><div class="line">        //具体的实现</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class ConcreteImplementor implements  Implementor&#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void operationImpl() &#123;</div><div class="line">        //具体的实现</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象部分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public abstract class Abstraction&#123;</div><div class="line">    private Implementor mImplementor;</div><div class="line"></div><div class="line">    public Abstraction(Implementor mImplementor) &#123;</div><div class="line">        this.mImplementor = mImplementor;</div><div class="line">    &#125;</div><div class="line">    public void operation()&#123;</div><div class="line">        //调用实现部分的具体方法</div><div class="line">        mImplementor.operationImpl();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>优化的抽象部分：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class RefinedAbstraction extends Abstraction&#123;</div><div class="line"></div><div class="line">    public RefinedAbstraction(Implementor mImplementor) &#123;</div><div class="line">        super(mImplementor);</div><div class="line">    &#125;</div><div class="line">    //可以增加拓展其他方法，也可以重写父类的方法，也能调用父类的方法</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void refinedperation() &#123;</div><div class="line">        //对抽象的父类的方法进行拓展</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>拿书中举得例子。这里用桥接模式来建立两个维度之间的联系。对咖啡来说，可以分为两个维度，杯子大小是一个维度，加不加糖又是一个维度。这两个没有谁是抽象部分谁是具体部分。就拿杯子大小作为抽象部分来做一个简单实现：</p>
+<p>抽象的糖，相当于实现部分的接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class CoffeeSugar &#123;</div><div class="line">    public abstract void makeSugar();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>两种实现部分的实现，加不加糖：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class AddSugar extends CoffeeSugar &#123;</div><div class="line">    @Override</div><div class="line">    public void makeSugar() &#123;</div><div class="line">        System.out.println(&quot;加糖的&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class NoSugar extends CoffeeSugar &#123;</div><div class="line">    @Override</div><div class="line">    public void makeSugar() &#123;</div><div class="line">        System.out.println(&quot;不加糖的&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>杯子的抽象，相当于抽象部分,持有一个糖的引用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public abstract class CoffeeCup &#123;</div><div class="line">    protected CoffeeSugar coffeeSugar;</div><div class="line"></div><div class="line">    public CoffeeCup(CoffeeSugar coffeeSugar) &#123;</div><div class="line">        this.coffeeSugar = coffeeSugar;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public  void makeCup()&#123;</div><div class="line">        coffeeSugar.makeSugar();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>优化的抽象部分，有大小两种杯子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class LargeCup extends CoffeeCup &#123;</div><div class="line">    public LargeCup(CoffeeSugar coffeeSugar) &#123;</div><div class="line">        super(coffeeSugar);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void makeCup() &#123;</div><div class="line">        System.out.println(&quot;大杯的&quot;);</div><div class="line">        super.makeCup();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class SmallCup extends CoffeeCup &#123;</div><div class="line">    public SmallCup(CoffeeSugar coffeeSugar) &#123;</div><div class="line">        super(coffeeSugar);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void makeCup() &#123;</div><div class="line">        System.out.println(&quot;小杯的&quot;);</div><div class="line">        super.makeCup();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        CoffeeSugar addSugar = new AddSugar();</div><div class="line">        CoffeeSugar noSugar = new NoSugar();</div><div class="line">        CoffeeCup coffee = new LargeCup(addSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">        System.out.println(&quot;---&quot;);</div><div class="line">        coffee = new LargeCup(noSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">        System.out.println(&quot;---&quot;);</div><div class="line">        coffee = new SmallCup(noSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieshuchu1.png" alt=""></p>
+<p>这样就把两个维度连接到一起了。而且两个维度是可以独立拓展的。比如如果想加上个中杯，或者来个多糖少糖等分类，只需要多实现几个类就行了，然后由客户端去调用。这样就能在两个维度上独立的拓展。</p>
+<p>再想加上第三个维度也是很简单的，现在要加上年龄分类，有老年人喝的喝年轻人喝的，者又是一个维度。</p>
+<p>这时可以把前面两个已经连接在一起的看做是一个维度，让新的去桥接者个已有的。</p>
+<p>抽象的people，持有一个之前的桥接，把people和CoffeeCup连接起来：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ublic abstract class People &#123;</div><div class="line">    protected CoffeeCup coffeeCup;</div><div class="line"></div><div class="line">    public People(CoffeeCup coffeeCup) &#123;</div><div class="line">        this.coffeeCup = coffeeCup;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public abstract void age();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的年龄分类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class YoungPeople extends People &#123;</div><div class="line">    public YoungPeople(CoffeeCup coffeeCup) &#123;</div><div class="line">        super(coffeeCup);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void age() &#123;</div><div class="line">        System.out.println(&quot;年轻人喝的&quot;);</div><div class="line">        coffeeCup.makeCup();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class OldPeople extends People &#123;</div><div class="line">    public OldPeople(CoffeeCup coffeeCup) &#123;</div><div class="line">        super(coffeeCup);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void age() &#123;</div><div class="line">        System.out.println(&quot;老年人喝的&quot;);</div><div class="line">        coffeeCup.makeCup();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后客户端只需要这样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        CoffeeSugar addSugar = new AddSugar();</div><div class="line">        CoffeeSugar noSugar = new NoSugar();</div><div class="line">        CoffeeCup coffee = new LargeCup(addSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">        System.out.println(&quot;---&quot;);</div><div class="line">        coffee = new LargeCup(noSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">        System.out.println(&quot;---&quot;);</div><div class="line">        coffee = new SmallCup(noSugar);</div><div class="line">        coffee.makeCup();</div><div class="line">        System.out.println(&quot;-----&quot;);</div><div class="line">        //再次桥接</div><div class="line">        People people = new OldPeople(coffee);</div><div class="line">        people.age();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/qiaojieshuchu2.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>桥接模式就是把系统分为抽象部分和实现部分，而建立桥接的方式也很简单。就是让抽象部分持有实现部分的引用，可以通过这个引用调用实现部分的具体方法。</p>
+<p>使用这个系统最重要的是把握系统的分离，分不好就失去了灵活的拓展性，因此不容易设计。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>分离成抽象部分和实现部分，并且两部分都可以独立的拓展，一个部分变化不会引起另一部分的变化，提高了系统的拓展性。</li>
+<li>复用性强，避免了使用继承产生大量继承类的问题。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>将系统分离为抽象部分和实现部分，会增加系统的复杂度和设计难度。如果系统不能分离出两个独立的维度的话，就不适合使用这个模式。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/11/Android设计模式（二十三）-桥接模式/" data-id="cj4hps3g3001fdsfyj1ygh6fh" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/11/Android设计模式-总结-索引/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式-总结+索引
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/10/Android设计模式（二十二）-外观模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（二十二）-外观模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

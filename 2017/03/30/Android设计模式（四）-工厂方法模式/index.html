@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（四）- 工厂方法模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="工厂方法模式也是创建型模式。工厂模式根据抽象程度可以分为三种：简单工厂模式，工厂方法模式，抽象工厂模式。 博客地址 定义定义一个用于创建对象的接口，让子类决定实例化哪一个类。">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（四）- 工厂方法模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/03/30/Android设计模式（四）-工厂方法模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="工厂方法模式也是创建型模式。工厂模式根据抽象程度可以分为三种：简单工厂模式，工厂方法模式，抽象工厂模式。 博客地址 定义定义一个用于创建对象的接口，让子类决定实例化哪一个类。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2062943-9ef248b59b5b2644.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（四）- 工厂方法模式">
+<meta name="twitter:description" content="工厂方法模式也是创建型模式。工厂模式根据抽象程度可以分为三种：简单工厂模式，工厂方法模式，抽象工厂模式。 博客地址 定义定义一个用于创建对象的接口，让子类决定实例化哪一个类。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2062943-9ef248b59b5b2644.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（四）-工厂方法模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（四）-工厂方法模式/" class="article-date">
+  <time datetime="2017-03-30T12:51:02.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（四）- 工厂方法模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工厂方法模式也是创建型模式。<br>工厂模式根据抽象程度可以分为三种：简单工厂模式，工厂方法模式，抽象工厂模式。</p>
+<p><a href="http://blog.csdn.net/qq_25806863/article/details/67110082" target="_blank" rel="external">博客地址</a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。<br><a id="more"></a></p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><p>任何需要生成复杂对象的地方，都可以使用工厂方法模式。用new就能创建的对象不需要使用工厂模式，因为使用工厂模式就要增加一个工厂类，增加了系统复杂度。</p>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p><img src="http://upload-images.jianshu.io/upload_images/2062943-9ef248b59b5b2644.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2 id="模式1"><a href="#模式1" class="headerlink" title="模式1"></a>模式1</h2><p>抽象的产品：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Product &#123;</div><div class="line">    public abstract void method();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的产品：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class ConcreteProductA extends Product &#123;</div><div class="line">    @Override</div><div class="line">    public void method() &#123;</div><div class="line">        System.out.println(&quot;产品A&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class ConcreteProductB extends Product &#123;</div><div class="line">    @Override</div><div class="line">    public void method() &#123;</div><div class="line">        System.out.println(&quot;产品B&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象的工厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Factory &#123;</div><div class="line">    public abstract Product createProduct();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的工厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ConcreteFactory extends Factory &#123;</div><div class="line">    @Override</div><div class="line">    public Product createProduct() &#123;</div><div class="line">        return new ConcreteProductA();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端使用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Factory factory = new ConcreteFactory();</div><div class="line">        Product product = factory.createProduct();</div><div class="line">        product.method();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样就生产出来一个ConcreteProductA。<br>如果想生产ConcreteFactory，在ConcreteFactory里修改为返回ConcreteFactory就行了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class ConcreteFactory extends Factory &#123;</div><div class="line">    @Override</div><div class="line">    public Product createProduct() &#123;</div><div class="line">        return new ConcreteProductB();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="模式2"><a href="#模式2" class="headerlink" title="模式2"></a>模式2</h2><p>通过反射来了解要生产哪个产品<br>抽象工厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class Factory &#123;</div><div class="line">    public abstract &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; clz);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体工厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class ConcreteFactory extends Factory &#123;</div><div class="line">    @Override</div><div class="line">    public &lt;T extends Product&gt; T createProduct(Class&lt;T&gt; clz) &#123;</div><div class="line">        Product  product = null;</div><div class="line">        try &#123;</div><div class="line">            product= (Product) Class.forName(clz.getName()).newInstance();</div><div class="line">        &#125; catch (InstantiationException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (IllegalAccessException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; catch (ClassNotFoundException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        return (T) product;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Factory factory = new ConcreteFactory();</div><div class="line">        Product product = factory.createProduct(ConcreteProductB.class);</div><div class="line">        product.method();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样，客户端调用的时候，传入什么产品就生产什么产品。</p>
+<h2 id="模式3"><a href="#模式3" class="headerlink" title="模式3"></a>模式3</h2><p>可以为每个产品都创建一个具体的工厂类，如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class ConcreteFactoryA extends Factory &#123;</div><div class="line">    @Override</div><div class="line">    public Product createProduct() &#123;</div><div class="line">        return new ConcreteProductA();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class ConcreteFactoryB extends Factory &#123;</div><div class="line">    @Override</div><div class="line">    public Product createProduct() &#123;</div><div class="line">        return new ConcreteProductA();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>要生产哪个就调用哪个工厂。</p>
+<p>这种叫<em>多工厂方法模式</em>。</p>
+<h2 id="简单工厂模式（静态工厂模式）"><a href="#简单工厂模式（静态工厂模式）" class="headerlink" title="简单工厂模式（静态工厂模式）"></a>简单工厂模式（静态工厂模式）</h2><p>当确定工厂类只有一个的时候，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class Factory&#123;</div><div class="line">    public static Product createProduct()&#123;</div><div class="line">        return new ConcreteProductA();</div><div class="line">        //return new ConcreteProductB();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>以汽车举个例子，<br>抽象的汽车厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public abstract class AodiFactory &#123;</div><div class="line">    public abstract &lt;T extends AodiCar&gt; T createAudiCar(Class&lt;T&gt; clz);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的汽车生产工厂：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class AodiCarFactory extends AodiFactory &#123;</div><div class="line">    @Override</div><div class="line">    public &lt;T extends AodiCar&gt; T createAudiCar(Class&lt;T&gt; clz) &#123;</div><div class="line">        AodiCar aodiCar = null;</div><div class="line">        try &#123;</div><div class="line">            aodiCar = (AodiCar) (Class.forName(clz.getName())).newInstance();</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; </div><div class="line">        return (T) aodiCar;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象的汽车：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public abstract class AodiCar &#123;</div><div class="line">    public abstract void diver();</div><div class="line">    public abstract void selfNav();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的汽车：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class AodiQ3 extends AodiCar &#123;</div><div class="line">    @Override</div><div class="line">    public void diver() &#123;</div><div class="line">        System.out.println(&quot;Q3启动&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void selfNav() &#123;</div><div class="line">        System.out.println(&quot;Q3导航&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">public class AodiQ5 extends AodiCar &#123;</div><div class="line">    @Override</div><div class="line">    public void diver() &#123;</div><div class="line">        System.out.println(&quot;Q5启动&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void selfNav() &#123;</div><div class="line">        System.out.println(&quot;Q5导航&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        AodiFactory aodiFactory = new AodiCarFactory();</div><div class="line">        AodiCar Q3 = aodiFactory.createAudiCar(AodiQ3.class);</div><div class="line">        Q3.diver();</div><div class="line">        Q3.selfNav();</div><div class="line">        AodiCar Q5 = aodiFactory.createAudiCar(AodiQ5.class);</div><div class="line">        Q5.diver();</div><div class="line">        Q5.selfNav();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Android源码中的工厂方法"><a href="#Android源码中的工厂方法" class="headerlink" title="Android源码中的工厂方法"></a>Android源码中的工厂方法</h2><p>书中举例是Activity的onCreate()方法，理由是：在不同的Activity的onCreate方法中调用setContentView会根据设置的不同的布局文件而产生不同的布局，所以可以看做是一个工厂。</p>
+<p>个人觉得有点牵强吧。。。不知道你们怎么看呢？</p>
+<p>有个很明显的BitmapFactory，应该是符合简单工厂模式的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">package android.graphics;</div><div class="line">public class BitmapFactory &#123;</div><div class="line">    public static Bitmap decodeFile(String pathName, Options opts) &#123;</div><div class="line">        Bitmap bm = null;</div><div class="line">        ......</div><div class="line">        return bm;</div><div class="line">    &#125;</div><div class="line">    //有很多静态方法返回一个Bitmap对象。</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>降低了对象之间的耦合度，代码结构清晰，对调用者隐藏了产品的生产过程，生产过程改变后，调用者不用做什么改变，易于修改。</li>
+<li>易于拓展，要增加工厂和产品都非常方便，直接实现接口，不用修改之前的代码。<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2>缺点应该就是会让系统结构复杂化了，如果是非常简单的结构就不需要使用这种模式了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（四）-工厂方法模式/" data-id="cj4hps3h7002qdsfyan0hshq1" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/30/Android设计模式（四）续：Activity的onCreate是怎么调用的/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（四）续：Activity的onCreate是怎么调用的
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/30/Android设计模式（三）-原型模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（三）- 原型模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换) | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="AsyncTask是Android提供的一个执行异步工作的类，内部其实是运用了线程池和Handler来进行异步任务的执行和与主线程的交互。AsyncTask只是一个辅助类，适合执行时间短的异步任务。 本文基于Android7.0的代码来说的。 原文地址  http://blog.csdn.net/qq_25806863/article/details/72782050 示例AsyncTask的使用">
+<meta name="keywords" content="Android,多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/05/23/Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="AsyncTask是Android提供的一个执行异步工作的类，内部其实是运用了线程池和Handler来进行异步任务的执行和与主线程的交互。AsyncTask只是一个辅助类，适合执行时间短的异步任务。 本文基于Android7.0的代码来说的。 原文地址  http://blog.csdn.net/qq_25806863/article/details/72782050 示例AsyncTask的使用">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc40.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc41.gif">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc42.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc43.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc44.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc45.gif">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc46.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc47.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc48.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc48.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc50.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc51.gif">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc52.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc53.gif">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc54.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc55.gif">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc56.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc57.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc58.gif">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)">
+<meta name="twitter:description" content="AsyncTask是Android提供的一个执行异步工作的类，内部其实是运用了线程池和Handler来进行异步任务的执行和与主线程的交互。AsyncTask只是一个辅助类，适合执行时间短的异步任务。 本文基于Android7.0的代码来说的。 原文地址  http://blog.csdn.net/qq_25806863/article/details/72782050 示例AsyncTask的使用">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc40.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/23/Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)/" class="article-date">
+  <time datetime="2017-05-23T02:53:51.000Z" itemprop="datePublished">2017-05-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>AsyncTask是Android提供的一个执行异步工作的类，内部其实是运用了线程池和Handler来进行异步任务的执行和与主线程的交互。AsyncTask只是一个辅助类，适合执行时间短的异步任务。</p>
+<p>本文基于Android7.0的代码来说的。</p>
+<p>原文地址  <a href="http://blog.csdn.net/qq_25806863/article/details/72782050" target="_blank" rel="external">http://blog.csdn.net/qq_25806863/article/details/72782050</a></p>
+<h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><p>AsyncTask的使用方法是很简单的。就做一个简单的进度条。</p>
+<a id="more"></a>
+<p> 布局是这样的：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc40.png" alt=""></p>
+<p>里面有一个进度条<code>ProgressBar pb1</code>,开始按钮<code>Button btn1</code>，停止按钮<code>Button stop1</code></p>
+<p>然后实现一个AsyncTask，通过构造方法接收一个ProgressBar和Button进行操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">String</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> String TAG = <span class="keyword">this</span>.getClass().getSimpleName();</div><div class="line"></div><div class="line">    Button btn;</div><div class="line">    ProgressBar pb;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAsyncTask</span><span class="params">(Button btn, ProgressBar pb)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.btn = btn;</div><div class="line">        <span class="keyword">this</span>.pb = pb;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</div><div class="line">        String result = <span class="string">"完成"</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Log.i(TAG, <span class="string">"doInBackground: "</span>+i);</div><div class="line">                Thread.sleep(<span class="number">500</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            publishProgress(i);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</div><div class="line">        Log.i(TAG, <span class="string">"onPreExecute: 准备工作"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        btn.setText(s);</div><div class="line">        Log.i(TAG, <span class="string">"onPostExecute: 回调"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... values)</span> </span>&#123;</div><div class="line">        pb.setProgress(values[<span class="number">0</span>]);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后给两个按钮添加点击事件：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MyAsyncTask task1</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">task1 = <span class="keyword">new</span> MyAsyncTask(btn1, pb1);</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">        Log.i(TAG, <span class="string">"onClick: 开始1"</span>);</div><div class="line">        task1.execute();</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">stop1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">        Log.i(TAG, <span class="string">"onClick: 停止1"</span>);</div><div class="line">        task1.cancel(<span class="keyword">true</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc41.gif" alt=""></p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc42.png" alt=""></p>
+<h1 id="1-构造参数"><a href="#1-构造参数" class="headerlink" title="1.构造参数"></a>1.构造参数</h1><p>AsyncTask定义了三个泛型参数，在继承的时候必须填写。例如上面的<code>AsyncTask&lt;String, Integer, String&gt;</code></p>
+<p>在源码中定义是：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc43.png" alt=""></p>
+<p>参数含义在下面的方法中会具体用到，先大致了解一下：</p>
+<ul>
+<li>Params  启动任务的时候输入的参数类型，一般都是String类型，如填个网址啥的。 上面示例中就是String类型。</li>
+<li>Progress 用来更新进度的类型。表示任务执行的进度的类型。 示例用的进度条，所以选择Integer类型。</li>
+<li>Result 后台任务执行完后返回的结果， 示例中返回的也是String类型。</li>
+</ul>
+<h1 id="2-重写方法"><a href="#2-重写方法" class="headerlink" title="2.重写方法"></a>2.重写方法</h1><p>要使用AsyncTask最少需要重写方法<code>doInBackground</code>。因为只有这个方法是抽象方法。</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc44.png" alt=""></p>
+<p>这个方法是在后台线程执行的。可以看到使用的参数类型Params就是在构造时定义的第一个类型。而返回的类型Result就是定义的第三个类型。</p>
+<p>初次之外一般为了对任务流程进行控制还会重写下面几个方法<code>onPreExecute</code>,<code>onPostExecute</code>,<code>onProgressUpdate</code>。</p>
+<p>下面几个方法在AsyncTask中是空的,而且都要求在主线程中执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@MainThread</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@MainThread</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Result result)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@MainThread</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Progress... values)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>onPreExecute() 在异步任务开始前做的操作，</li>
+<li>onPostExecute(Result result)  后台任务执行完后，通过这个方法能拿到任务返回的结果，进行处理。</li>
+<li>onProgressUpdate(Progress… values)  这个表示进度变化，参数类型是构造时的第二个类型Progress。进度应该是随着任务的执行实时更新的，但是这个方法要在主线程中运行，而<code>doInBackground</code>是在子线程中运行，所以不能直接在<code>doInBackground</code>中调用<code>onProgressUpdate</code>方法，而是通过调用<code>publishProgress(Progress... values)</code>来间接调用这个方法。</li>
+</ul>
+<h1 id="3-开始任务"><a href="#3-开始任务" class="headerlink" title="3.开始任务"></a>3.开始任务</h1><p>AsyncTask的开始有下面三种方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">execute(Params... params)</div><div class="line">executeOnExecutor(Executor exec,Params... params) </div><div class="line">execute(Runnable runnable)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>execute(Params… params)  这个就是在示例中使用的开始任务的方式，传入指定的参数，参数类型要和构造时定义的第一个参数类型Params一样。参数可以为空的，那么在方法<code>doInBackground(Params... params)</code>中的参数也是空的。使用默认的线程池执行任务，会按流程执行<code>onPreExecute</code>,<code>doInBackground(Params... params)</code>,<code>onPostExecute(Result result)</code>等方法。</p>
+</li>
+<li><p>executeOnExecutor(Executor exec,Params… params)   如果默认的线程池不能满足你的要求，可以用这个方法用指定线程池来执行任务。流程跟上面是一样的。</p>
+</li>
+<li><p>execute(Runnable runnable)  这个方法传进来的是一个Runnable类型，方法中只有一行代码<code>sDefaultExecutor.execute(runnable)</code>就是用默认的线程池直接执行任务，就是使用线程池了，跟前面那些重写的方法没关系。</p>
+<p>​</p>
+</li>
+</ul>
+<h1 id="4-停止任务"><a href="#4-停止任务" class="headerlink" title="4.停止任务"></a>4.停止任务</h1><p>要停止任务可以调用下面的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">cancel</span><span class="params">(<span class="keyword">boolean</span> mayInterruptIfRunning)</span> </span>&#123;</div><div class="line">    mCancelled.set(<span class="keyword">true</span>);</div><div class="line">    <span class="keyword">return</span> mFuture.cancel(mayInterruptIfRunning);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面是停止的演示：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc45.gif" alt=""></p>
+<p>取消也有一个回调方法可以重写,这里加上，也是运行在主线程中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>&#123;</div><div class="line">    Log.i(TAG, <span class="string">"onCancelled: 取消任务"</span>);</div><div class="line">    btn.setText(<span class="string">"取消了"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="取消的问题"><a href="#取消的问题" class="headerlink" title="取消的问题"></a>取消的问题</h2><p>当<code>cancel</code>方法被调用后，<code>onPostExecute</code>和<code>onProgressUpdate</code>方法都不会再调用了。而<code>doInBackground</code>方法却会一直执行下去，也就是后台任务会继续执行。</p>
+<p><code>cancel(boolean mayInterruptIfRunning)</code>这个参数<code>mayInterruptIfRunning</code>文档中表示是否应该立即终止<code>doInBackground</code>中的任务。</p>
+<p>然而实际用起来就不是那样的了，无论我们传的是<code>true</code>还是<code>false</code>，而AsyncTask的<code>cancle</code>方法只是打上了一个取消的标记。并不是直接终止任务。如果是<code>true</code>，则会调用一下后台线程的<code>interrupt</code>方法。</p>
+<p>当调用了<code>cancle</code>方法后，调用<code>isCancelled</code>方法会返回true。在<code>doInBackground</code>中应该调用<code>isCancelled</code>来检查当前任务是否被取消，以便及时终止任务。</p>
+<p>AsyncTask设计成这样就是为了方便更新主线程界面的，所以对用户来说，在调用了cancle方法后，后台的任务就不会在影响到主线程的界面变化了，因为后续的跟主线程交互的方法都不会再执行了。，也可以说是取消了。</p>
+<p>而真的要及时取消<code>doInBackground</code>的继续运行则需要在这个方法中进行一些判断。</p>
+<h3 id="不做处理"><a href="#不做处理" class="headerlink" title="不做处理"></a>不做处理</h3><p>不做处理也就是在<code>doInBackground</code>中不做判断，像下面这样。看一下输出的日志。当然界面的进度条都会停住，只要看<code>doInBackground</code>有没有在点击停止按钮后停下来。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</div><div class="line">        String result = <span class="string">"完成"</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Log.i(TAG, <span class="string">"doInBackground: "</span>+i);</div><div class="line">                Thread.sleep(<span class="number">500</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">				e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">            publishProgress(i);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>cancle(true):</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc46.png" alt=""></p>
+</li>
+<li><p>cancle(false):</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc47.png" alt=""></p>
+</li>
+</ul>
+<p>可以看到区别是，当值为true的时候，后台线程也会跑完。但是会调用子线程的<code>interrupt</code>方法，而这个现在正在sleep，所以会引发<code>InterruptedException</code>.</p>
+<p>而值为false的时候，没有任何变化，后台线程继续跑完。</p>
+<h3 id="做处理"><a href="#做处理" class="headerlink" title="做处理"></a>做处理</h3><h4 id="1-判断isCancelled"><a href="#1-判断isCancelled" class="headerlink" title="1. 判断isCancelled"></a>1. 判断isCancelled</h4><p>在不同的运行节点判断这个方法的值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</div><div class="line">    String result = <span class="string">"完成"</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">if</span> (isCancelled())&#123;</div><div class="line">                Log.i(TAG, <span class="string">"doInBackground: 被标记停止了"</span>);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            Log.i(TAG, <span class="string">"doInBackground: "</span>+i);</div><div class="line">            Thread.sleep(<span class="number">500</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        publishProgress(i);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时调用cancle(false)：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc48.png" alt=""></p>
+<p>调用cancle(true)只是会多打印一个异常，一样会停止。</p>
+<h4 id="2-抓异常"><a href="#2-抓异常" class="headerlink" title="2.抓异常"></a>2.抓异常</h4><p>因为调用cancle(true)的时候有可能会抛出异常，如这个例子中的<code>InterruptedException</code>，因此可以通过异常捕捉来实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</div><div class="line">    String result = <span class="string">"完成"</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Log.i(TAG, <span class="string">"doInBackground: "</span>+i);</div><div class="line">            Thread.sleep(<span class="number">500</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">            Log.i(TAG, <span class="string">"doInBackground: 捕捉到异常,退出"</span>);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        publishProgress(i);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这时调用cancle(true)：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc48.png" alt=""></p>
+<h1 id="并行和串行"><a href="#并行和串行" class="headerlink" title="并行和串行"></a>并行和串行</h1><p>据说AsyncTask的任务是并行还是串行执行在不同Android版本有所变化，但是从API13开始，AsyncTask的任务执行都是串行的。</p>
+<p>何为串行，比如有下面的界面：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc50.png" alt=""></p>
+<p>有两个task</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> ProgressBar pb1;</div><div class="line"><span class="keyword">private</span> ProgressBar pb2;</div><div class="line"><span class="keyword">private</span> Button btn1;</div><div class="line"><span class="keyword">private</span> Button btn2;</div><div class="line"><span class="keyword">private</span> Button stop1;</div><div class="line"><span class="keyword">private</span> Button stop2;</div><div class="line"><span class="keyword">private</span> MyAsyncTask task1, task2;</div><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line">        initView();</div><div class="line">        task1 = <span class="keyword">new</span> MyAsyncTask(btn1, pb1);</div><div class="line">        task2 = <span class="keyword">new</span> MyAsyncTask(btn2, pb2);java</div><div class="line">        btn1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">                Log.i(TAG, <span class="string">"onClick: 开始1"</span>);</div><div class="line">                task1.execute();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        btn2.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">                Log.i(TAG, <span class="string">"onClick: 开始2"</span>);</div><div class="line">                task2.execute();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        stop1.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">                Log.i(TAG, <span class="string">"onClick: 停止1 "</span>);</div><div class="line">                task1.cancel(<span class="keyword">true</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        stop2.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">                Log.i(TAG, <span class="string">"onClick: 停止2"</span>);</div><div class="line">                task2.cancel(<span class="keyword">false</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>在上面的MyAstncTask中，后台任务要执行10秒。</p>
+<p>这里为了区分，打印开始按钮的名字来区分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAsyncTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">String</span>, <span class="title">Integer</span>, <span class="title">String</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> String TAG = <span class="keyword">this</span>.getClass().getSimpleName();</div><div class="line"></div><div class="line">    Button btn;</div><div class="line">    ProgressBar pb;</div><div class="line">    String name;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAsyncTask</span><span class="params">(Button btn, ProgressBar pb)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.btn = btn;</div><div class="line">        <span class="keyword">this</span>.pb = pb;</div><div class="line">        name = btn.getText().toString();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">doInBackground</span><span class="params">(String... params)</span> </span>&#123;</div><div class="line">        String result = <span class="string">"完成"</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                Log.i(TAG, <span class="string">"doInBackground: "</span>+name+<span class="string">" "</span>+i);</div><div class="line">                Thread.sleep(<span class="number">500</span>);</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">                Log.i(TAG, <span class="string">"doInBackground: 捕捉到异常,退出"</span>);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            publishProgress(i);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</div><div class="line">        Log.i(TAG, <span class="string">"onPreExecute: 准备工作 "</span>+name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(String s)</span> </span>&#123;</div><div class="line">        btn.setText(s);</div><div class="line">        Log.i(TAG, <span class="string">"onPostExecute: 回调 "</span>+name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... values)</span> </span>&#123;</div><div class="line">        pb.setProgress(values[<span class="number">0</span>]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>&#123;</div><div class="line">        Log.i(TAG, <span class="string">"onCancelled: 取消任务 "</span>+name);</div><div class="line">        btn.setText(<span class="string">"取消了"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在点击第一个开始按钮之后点击第二个开始按钮，效果：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc51.gif" alt=""></p>
+<p>打印日志:</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc52.png" alt=""></p>
+<p>虽然点击了开始2，但是依然等第一个任务完成了才开始第二个任务。</p>
+<p>想要让任务并行执行怎么办呢？其实他之所以会串行执行任务，是因为内部默认的线程池中将任务进行了排队，保证他们一个一个来。只要我们换个满足要求的线程池来执行任务就行了。AstncTask内部就有一个线程池<code>AsyncTask.THREAD_POOL_EXECUTOR</code>可以使用。当然，用Executors来创建也行。</p>
+<p>然后将开始任务的<code>execute(Params... params)</code>方法改为<code>executeOnExecutor(Executor exec,Params... params)</code>.这里用<code>AsyncTask.THREAD_POOL_EXECUTOR</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">task1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);</div><div class="line">task2.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);</div></pre></td></tr></table></figure>
+<p>效果：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc53.gif" alt=""></p>
+<p>日志：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc54.png" alt=""></p>
+<h1 id="屏幕横竖屏切换"><a href="#屏幕横竖屏切换" class="headerlink" title="屏幕横竖屏切换"></a>屏幕横竖屏切换</h1><p>使用AsyncTask的时候，在屏幕切换也会出现问题。</p>
+<p>画面是这样的：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc55.gif" alt=""></p>
+<p>日志是这样的，动图中也能看见：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc56.png" alt=""></p>
+<p>虽然屏幕切换后，任务也在执行，也在不停地调用更新进度条的方法，最后也执行了<code>onPostExecute</code>方法，但是界面上就是什么变化都没有。</p>
+<p>因为在横竖屏切换的时候，Activity会销毁重建，所以AsyncTask所持有的引用就不是新建的Activity的控件了，新的Activity就不会变化了。</p>
+<h2 id="其中一种解决方法"><a href="#其中一种解决方法" class="headerlink" title="其中一种解决方法"></a>其中一种解决方法</h2><p>很简单,加上这句就行了。</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc57.png" alt=""></p>
+<p>这时屏幕怎么切换都没事</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc58.gif" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/05/23/Android多线程-AsyncTask的使用和问题(取消，并行，屏幕切换)/" data-id="cj4hps3fg000hdsfyg1bcznjj" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/31/Android多线程-AsyncTask工作流程-源码/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android多线程-AsyncTask工作流程(源码)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/15/Android纯的二维码扫描界面和功能-zxing/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android纯的二维码扫描界面和功能-zxing</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java多线程-CompletionService | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="起原文地址 http://blog.csdn.net/qq_25806863/article/details/71743659 在之前说过，线程池ThreadPoolExecutor可以调用submit方法来获取返回值Future。像下面这样：">
+<meta name="keywords" content="多线程,java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程-CompletionService">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/05/11/Java多线程-CompletionService/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="起原文地址 http://blog.csdn.net/qq_25806863/article/details/71743659 在之前说过，线程池ThreadPoolExecutor可以调用submit方法来获取返回值Future。像下面这样：">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc25.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc26.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc27.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc28.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc29.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc30.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java多线程-CompletionService">
+<meta name="twitter:description" content="起原文地址 http://blog.csdn.net/qq_25806863/article/details/71743659 在之前说过，线程池ThreadPoolExecutor可以调用submit方法来获取返回值Future。像下面这样：">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc25.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java多线程-CompletionService" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/11/Java多线程-CompletionService/" class="article-date">
+  <time datetime="2017-05-11T09:05:38.000Z" itemprop="datePublished">2017-05-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java多线程-CompletionService
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="起"><a href="#起" class="headerlink" title="起"></a>起</h1><p>原文地址 <a href="http://blog.csdn.net/qq_25806863/article/details/71743659" target="_blank" rel="external">http://blog.csdn.net/qq_25806863/article/details/71743659</a></p>
+<p>在<a href="http://blog.csdn.net/qq_25806863/article/details/71214033#t7" target="_blank" rel="external">之前说过</a>，线程池ThreadPoolExecutor可以调用submit方法来获取返回值Future。像下面这样：</p>
+<a id="more"></a>
+<p>这里先定义三个Callable，之后都用这三个：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Callable callable1 = <span class="keyword">new</span> Callable() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">              Thread.sleep(<span class="number">5000</span>);</div><div class="line">              <span class="keyword">return</span> <span class="string">"我是call1的返回值"</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;;</div><div class="line">      Callable callable2 = <span class="keyword">new</span> Callable() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">              Thread.sleep(<span class="number">3000</span>);</div><div class="line">              <span class="keyword">return</span> <span class="string">"我是call2的返回值"</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;;</div><div class="line">      Callable callable3 = <span class="keyword">new</span> Callable() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">              Thread.sleep(<span class="number">1000</span>);</div><div class="line">              <span class="keyword">return</span> <span class="string">"我是call3的返回值"</span>;</div><div class="line">          &#125;</div><div class="line">      &#125;;</div></pre></td></tr></table></figure>
+<p>直接使用ThreadPoolExecutor的submit获取结果的使用方法是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//声明一个线程池</span></div><div class="line">ExecutorService executor = Executors.newFixedThreadPool(<span class="number">5</span>);</div><div class="line"><span class="comment">//提交三个任务</span></div><div class="line">Future future1 = executor.submit(callable1);</div><div class="line">Future future2 = executor.submit(callable2);</div><div class="line">Future future2 = executor.submit(callable2);</div><div class="line"><span class="comment">//开始获取返回值</span></div><div class="line">System.out.println(<span class="string">"两个任务提交完毕，开始获取结果 "</span>+getStringDate());</div><div class="line">System.out.println(future1.get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(future2.get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(future3.get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(<span class="string">"获取结果完毕 "</span>+getStringDate());</div></pre></td></tr></table></figure>
+<p>根据之前的理解，<code>get()</code>方法是有阻塞性的，因为future1的任务执行时间是5秒，所以在<code>future1.get()</code>这行代码上会阻塞5秒，然后才会获取到结果，继续往下执行。而在5秒内future2和future3的任务已经执行完了，所以会立马得到结果。</p>
+<p>真实输出也是这样：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc25.png" alt=""></p>
+<p>明明future2和future3的任务早就执行完了，却被<code>future1.get()</code>方法阻塞了。</p>
+<p>使用CompletionService可以作为一种解决方法。</p>
+<h1 id="CompletionService简介"><a href="#CompletionService简介" class="headerlink" title="CompletionService简介"></a>CompletionService简介</h1><p>CompletionService的主要功能就是一边生成任务，一边获取任务的返回值。让两件事分开执行，任务之间不会互相阻塞。</p>
+<p>CompletionService在提交任务之后，会根据任务完成顺序来获取返回值，也就是谁先完成就返回谁的返回值。</p>
+<p>CompletionService是一个接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CompletionService</span>&lt;<span class="title">V</span>&gt; </span>&#123;</div><div class="line">    <span class="function">Future&lt;V&gt; <span class="title">submit</span><span class="params">(Callable&lt;V&gt; var1)</span></span>;</div><div class="line">    <span class="function">Future&lt;V&gt; <span class="title">submit</span><span class="params">(Runnable var1, V var2)</span></span>;</div><div class="line">    <span class="function">Future&lt;V&gt; <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;</div><div class="line">    <span class="function">Future&lt;V&gt; <span class="title">poll</span><span class="params">()</span></span>;</div><div class="line">    <span class="function">Future&lt;V&gt; <span class="title">poll</span><span class="params">(<span class="keyword">long</span> var1, TimeUnit var3)</span> <span class="keyword">throws</span> InterruptedException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>CompletionService只有一个实现类，就是ExecutorCompletionService</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc26.png" alt=""></p>
+<p>我这里有两个是因为用的AndroidStudio，一个是java的SDK的一个是Android的SDK的。</p>
+<h1 id="ExecutorCompletionService的使用"><a href="#ExecutorCompletionService的使用" class="headerlink" title="ExecutorCompletionService的使用"></a>ExecutorCompletionService的使用</h1><p>CompletionService接口一共也就定义了那么几个方法，submit方法和ExecutorService的submit没什么不同。</p>
+<p>下面主要分析一下<code>take()</code>方法和<code>poll()</code>方法</p>
+<h2 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h2><p>ExecutorCompletionService的构造方法有两个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public ExecutorCompletionService(Executor var1)</div><div class="line">ExecutorCompletionService(Executor var1, BlockingQueue&lt;Future&lt;V&gt;&gt; var2)</div></pre></td></tr></table></figure>
+<p>由此可见，CompletionService对任务的各种操作还是通过Executor来实现的，一般就是ThreadPoolExecutor。</p>
+<p>下面是一个简单例子：</p>
+<p>还是用一开始的三个Callable，这次用CompletionService来提交任务并获取结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//新建一个线程池executor</span></div><div class="line">ExecutorService executor = Executors.newFixedThreadPool(<span class="number">5</span>);</div><div class="line"><span class="comment">//用线程池executor新建一个CompletionService</span></div><div class="line">CompletionService completionService = <span class="keyword">new</span> ExecutorCompletionService(executor);</div><div class="line"><span class="comment">//用CompletionService提交任务</span></div><div class="line">completionService.submit(callable1);</div><div class="line">completionService.submit(callable2);</div><div class="line">completionService.submit(callable3);</div><div class="line"><span class="comment">//用CompletionService获取结果</span></div><div class="line">System.out.println(<span class="string">"两个任务提交完毕，开始获取结果 "</span>+getStringDate());</div><div class="line">System.out.println(completionService.take().get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(completionService.take().get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(completionService.take().get()+<span class="string">" "</span>+getStringDate());</div><div class="line">System.out.println(<span class="string">"获取结果完毕 "</span>+getStringDate());</div></pre></td></tr></table></figure>
+<p>可以看下输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc27.png" alt=""></p>
+<p>虽然提交的顺序是1，2，3，但是获取结果的时候是按任务完成顺序来获取的，所以结果是3，2，1.</p>
+<h2 id="take-方法"><a href="#take-方法" class="headerlink" title="take()方法"></a>take()方法</h2><p>其实take()方法也是一个阻塞方法，调用这个方法时，他会一直等待直到线程池中返回一个结果，哪个任务先完成，就返回哪个任务的结果。</p>
+<p>在上面的例子中，由于callable3是最先完成的，所以最先拿到的值就是callable3的返回值。</p>
+<p>因为刚好提交了3个任务，调用了3次take()方法，因此刚好能拿到全部的任务的结果。</p>
+<p>如果在调用一次take()方法，那么就会因为等不到有任务返回结果而阻塞在那里：</p>
+<p>例如值提交一个任务，而调用两次take()方法，那么程序就会阻塞在第二个take()方法那里等待一个结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ExecutorService executor = Executors.newFixedThreadPool(5);</div><div class="line">      CompletionService completionService = new ExecutorCompletionService(executor);</div><div class="line">      completionService.submit(callable1);</div><div class="line">      System.out.println(&quot;两个任务提交完毕，开始获取结果 &quot;+getStringDate());</div><div class="line"></div><div class="line">      System.out.println(completionService.take().get()+&quot; &quot;+getStringDate());</div><div class="line">      System.out.println(completionService.take().get()+&quot; &quot;+getStringDate());</div><div class="line"></div><div class="line">      System.out.println(&quot;获取结果完毕 &quot;+getStringDate());</div></pre></td></tr></table></figure>
+<p>结果会一直是这样</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc28.png" alt=""></p>
+<h2 id="poll-方法和poll-long-var1-TimeUnit-var3-方法"><a href="#poll-方法和poll-long-var1-TimeUnit-var3-方法" class="headerlink" title="poll()方法和poll(long var1, TimeUnit var3)方法"></a>poll()方法和poll(long var1, TimeUnit var3)方法</h2><p>Poll()方法也是获取返回值，使用方法也跟take()一样。</p>
+<p>而poll()方法和take()方法的区别就是，poll()方法不会阻塞的去等结果，而是如果调用poll()方法的时候没有结果可以获取就直接返回一个null，然后程序继续往下运行。</p>
+<p>这时如果调用poll().get()可能会引发空指针异常<code>java.lang.NullPointerException</code></p>
+<p>例子：</p>
+<p>依旧是一开始那三个任务，在循环中连续调用8次poll()方法，每次间隔1秒钟：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ExecutorService executor = Executors.newFixedThreadPool(5);</div><div class="line">CompletionService completionService = new ExecutorCompletionService(executor);</div><div class="line">completionService.submit(callable1);</div><div class="line">completionService.submit(callable2);</div><div class="line">completionService.submit(callable3);</div><div class="line">System.out.println(&quot;两个任务提交完毕，开始获取结果 &quot;+getStringDate());</div><div class="line">for (int i = 0; i &lt; 8; i++) &#123;</div><div class="line">              Future future = completionService.poll();</div><div class="line">              if (future!=null)&#123;</div><div class="line">              //如果future为空，会引发 NullPointerException</div><div class="line">                  System.out.println(future.get() + getStringDate());</div><div class="line">              &#125;else &#123;</div><div class="line">                  System.out.println(future+&quot; &quot;+getStringDate());</div><div class="line">              &#125;</div><div class="line">              Thread.sleep(1000);</div><div class="line">          &#125;          </div><div class="line">System.out.println(&quot;获取结果完毕 &quot;+getStringDate());</div></pre></td></tr></table></figure>
+<p>输出：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc29.png" alt=""></p>
+<p>每次调用都是立马返回，毫不犹豫。所以没有结果的时候就返回空。</p>
+<p>而poll(long var1, TimeUnit var3)方法就相当于给他强制设置了一个等待时间，你如果拿不到结果就等这么久，等这么久还拿不到再返回null。</p>
+<p>把上面的循环改成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">for (int i = 0; i &lt; 8; i++) &#123;</div><div class="line">    Future future = completionService.poll(1, TimeUnit.SECONDS);</div><div class="line">    if (future!=null)&#123;</div><div class="line">        System.out.println(future.get() + getStringDate());</div><div class="line">    &#125;else &#123;</div><div class="line">        System.out.println(future+&quot; &quot;+getStringDate());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不在睡眠了，每次调用poll()方法个体1秒的等待时间。</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/java/dxc30.png" alt=""></p>
+<p>这里第一次调用就等了1秒，然后在1秒内等到了call3的返回值，就返回call3的返回值。</p>
+<p>第二次循环又等了一秒，一秒内没有获得结果，返回null。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/05/11/Java多线程-CompletionService/" data-id="cj4hps3hb002ydsfyulnzeg4b" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多线程/">多线程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/15/Android纯的二维码扫描界面和功能-zxing/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android纯的二维码扫描界面和功能-zxing
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/05/Java多线程-线程池ThreadPoolExecutor的submit返回值Future/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Java多线程-线程池ThreadPoolExecutor的submit返回值Future</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（十九）-适配器模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="适配器模式是咋Android中使用非常广泛的一种设计模式，总到处可见的Adapter就可以看出来。适配器模式类似于电源适配器的设计思想，将两个不兼容的东西通过适配兼容到一起。 在实际开发中，经常会遇见两个没有关系的类型之间的交互。那么有下面两个方式：  修改各自类的接口，以达到互相交互的目的。 在两个类之间建立一个“混血儿”接口，将两个类型进行兼容，不用修改原来的类的代码。  第一种方式明显不是个">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（十九）-适配器模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/04/07/Android设计模式（十九）-适配器模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="适配器模式是咋Android中使用非常广泛的一种设计模式，总到处可见的Adapter就可以看出来。适配器模式类似于电源适配器的设计思想，将两个不兼容的东西通过适配兼容到一起。 在实际开发中，经常会遇见两个没有关系的类型之间的交互。那么有下面两个方式：  修改各自类的接口，以达到互相交互的目的。 在两个类之间建立一个“混血儿”接口，将两个类型进行兼容，不用修改原来的类的代码。  第一种方式明显不是个">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/shipeiqiuml1.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/shipeiqiuml2.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（十九）-适配器模式">
+<meta name="twitter:description" content="适配器模式是咋Android中使用非常广泛的一种设计模式，总到处可见的Adapter就可以看出来。适配器模式类似于电源适配器的设计思想，将两个不兼容的东西通过适配兼容到一起。 在实际开发中，经常会遇见两个没有关系的类型之间的交互。那么有下面两个方式：  修改各自类的接口，以达到互相交互的目的。 在两个类之间建立一个“混血儿”接口，将两个类型进行兼容，不用修改原来的类的代码。  第一种方式明显不是个">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/shipeiqiuml1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（十九）-适配器模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/07/Android设计模式（十九）-适配器模式/" class="article-date">
+  <time datetime="2017-04-07T08:09:38.000Z" itemprop="datePublished">2017-04-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（十九）-适配器模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>适配器模式是咋Android中使用非常广泛的一种设计模式，总到处可见的Adapter就可以看出来。适配器模式类似于电源适配器的设计思想，将两个不兼容的东西通过适配兼容到一起。</p>
+<p>在实际开发中，经常会遇见两个没有关系的类型之间的交互。那么有下面两个方式：</p>
+<ol>
+<li>修改各自类的接口，以达到互相交互的目的。</li>
+<li>在两个类之间建立一个“混血儿”接口，将两个类型进行兼容，不用修改原来的类的代码。</li>
+</ol>
+<p>第一种方式明显不是个好选择，我们不愿意为了一个应用而修改各自的接口。而且如果一个类要适配很多类的话，避免要做很多 这样的修改，既不利于扩展也不利于维护。</p>
+<p>第二种就是要说的适配器模式了。<br><a id="more"></a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>适配器模式吧一个类的接口变换成客户端锁期待的另一种接口，从而使原本因为接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>系统需要使用现有的类，但是这个类的接口不符合系统的需要。</li>
+<li>想要建立一个可以重复使用的类，用于与一些批次之间没有太大关联的一些类，包括一些可能在将来引进的类一起工作。</li>
+<li>需要一个统一的输出接口，而输出的类型不确定。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p>适配器模式也分两种，类适配器和对象适配器</p>
+<h2 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h2><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/shipeiqiuml1.png" alt=""></p>
+<p>类适配器通过实现Target接口和继承Adaptee类来实现接口转换。比如Target需要operation2，而Adaptee只有operation3，所以Adapter就能把operation3转为operation2供Target使用。</p>
+<ul>
+<li>目标角色，所期待的接口，虽然是类适配器，但这个目标不能是类。</li>
+<li>需要适配的接口</li>
+<li>适配器，把源接口转换成目标接口。这个角色必须是具体类。</li>
+</ul>
+<h2 id="类适配器简单实现"><a href="#类适配器简单实现" class="headerlink" title="类适配器简单实现"></a>类适配器简单实现</h2><p>就以电源适配器为例子，一般笔记本需要5V的电压，而电源都是220V的。这是就需要电源适配器出来干活了。</p>
+<p>代码很简单</p>
+<p>先建目标接口，需要的是5V的电压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface FiveVolt &#123;</div><div class="line">    public int getVolt5();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后是插座的电压220v<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class Volt220 &#123;</div><div class="line">    public int getVolt220()&#123;</div><div class="line">        return 220;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>适配器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class VoltAdapter extends Volt220 implements FiveVolt &#123;</div><div class="line">    @Override</div><div class="line">    public int getVolt5() &#123;</div><div class="line">        return 5;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样就解决了接口不兼容的问题</p>
+<h2 id="对象适配器"><a href="#对象适配器" class="headerlink" title="对象适配器"></a>对象适配器</h2><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/shipeiqiuml2.png" alt=""></p>
+<p>对象适配器一样是吧被适配类的API转化成目标类的API。但是，对象适配器模式不是使用继承关系连接到Adaptee类，而是使用代理关系。</p>
+<p>目标：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface FiveVolt &#123;</div><div class="line">    public int getVolt5();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>需要适配的:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class Volt220 &#123;</div><div class="line">    public int getVolt220()&#123;</div><div class="line">        return 220;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>适配器:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public class VoltAdapter implements FiveVolt &#123;</div><div class="line">    Volt220 volt220 ;</div><div class="line"></div><div class="line">    public VoltAdapter(Volt220 volt220) &#123;</div><div class="line">        this.volt220 = volt220;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getVolt5() &#123;</div><div class="line">        return 5;</div><div class="line">    &#125;</div><div class="line">    public int getVolt220()&#123;</div><div class="line">        return volt220.getVolt220();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        VoltAdapter voltAdapter = new VoltAdapter(new Volt220());</div><div class="line">        System.out.println(voltAdapter.getVolt5());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对象适配器直接把要被适配的对象传递到Adapter中，使用组合的形式实现接口兼容。比类适配器更加灵活，而且不会暴露被适配对象中的方法。</p>
+<p>类适配器由于继承了被适配的类，所以这个适配器会拥有被适配对象的方法，导致适配器出现一些奇怪的方法。</p>
+<p>适配器模式还经常用于处理不兼容类型的统一输出问题。例如ListView的输入有很多种类型，但输出都是View，适配器就可以做到这一点。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>提高现有类和系统类的复用性，适配器能让一个类有更广泛的用途。</li>
+<li>提高了灵活想，更换适配器就能达到不同的效果。而且不用修改原有代码。</li>
+<li>类适配器可以重写继承的被适配者的一些方法来增加灵活性</li>
+<li>对象适配器可以传入不同的对象把不同的对象都适配到同一个接口。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>过多的使用适配器，会让系统变得非常凌乱，不易整体把握。明明调用A接口，却被适配成B接口。</li>
+<li>java不能多继承，所以类适配器只能适配一个被适配类。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/07/Android设计模式（十九）-适配器模式/" data-id="cj4hps3gv0029dsfy12as88i6" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/09/Android设计模式（二十）-装饰模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（二十）-装饰模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/07/Android设计模式（十八）-组合模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（十八）-组合模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

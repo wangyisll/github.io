@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（十五）-访问者模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="访问者模式是一种将数据操作与数据结构分离的设计模式。确实是我目前为止见过的最复杂的了。 访问者模式的思想是：  软件系统中拥有一个由许多对象构成的，比较稳定的对象结构。这些对象都拥有一个accept方法来接受访问者的访问。 访问者是一个接口，对对象结构中的每一个元素都提供一个visit方法，对不同的访问对象执行不同的visit方法做出不同的处理。 在对象结构的一次访问中，遍历整个对象结构，对每一个">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（十五）-访问者模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十五）-访问者模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="访问者模式是一种将数据操作与数据结构分离的设计模式。确实是我目前为止见过的最复杂的了。 访问者模式的思想是：  软件系统中拥有一个由许多对象构成的，比较稳定的对象结构。这些对象都拥有一个accept方法来接受访问者的访问。 访问者是一个接口，对对象结构中的每一个元素都提供一个visit方法，对不同的访问对象执行不同的visit方法做出不同的处理。 在对象结构的一次访问中，遍历整个对象结构，对每一个">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/fangwenzheuml.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/fangwenzheshuchu.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（十五）-访问者模式">
+<meta name="twitter:description" content="访问者模式是一种将数据操作与数据结构分离的设计模式。确实是我目前为止见过的最复杂的了。 访问者模式的思想是：  软件系统中拥有一个由许多对象构成的，比较稳定的对象结构。这些对象都拥有一个accept方法来接受访问者的访问。 访问者是一个接口，对对象结构中的每一个元素都提供一个visit方法，对不同的访问对象执行不同的visit方法做出不同的处理。 在对象结构的一次访问中，遍历整个对象结构，对每一个">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/fangwenzheuml.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（十五）-访问者模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/05/Android设计模式（十五）-访问者模式/" class="article-date">
+  <time datetime="2017-04-05T09:21:55.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（十五）-访问者模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>访问者模式是一种将数据操作与数据结构分离的设计模式。确实是我目前为止见过的最复杂的了。</p>
+<p>访问者模式的思想是：</p>
+<ul>
+<li>软件系统中拥有一个由许多对象构成的，比较稳定的对象结构。这些对象都拥有一个accept方法来接受访问者的访问。</li>
+<li>访问者是一个接口，对对象结构中的每一个元素都提供一个visit方法，对不同的访问对象执行不同的visit方法做出不同的处理。</li>
+<li>在对象结构的一次访问中，遍历整个对象结构，对每一个元素执行accept方法，在每个accept方法中调用访问者的visit方法，从而使访问者可以处理对象结构中的每一个元素。</li>
+<li>可以针对同一个对象结构，设计不同的访问者类，达到区别对待的目的。<a id="more"></a>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1></li>
+</ul>
+<p>封装某些作用于某种数据结构中各元素的操作，它可以在不改变数据结构的前提下定义作用于这些元素的新的操作。</p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>对象结构稳定，但经常需要在此对象结构上定义新的操作。</li>
+<li>需要对一个对象结构中的元素进行很多不同的操作，为了避免这些操作“污染”这些对象的类，也为了避免在增加新操作时修改这些类。</li>
+<li>加入在一组对象中存在相似的操作，为了减少代码重复率，将相同的操作封装到访问者中去。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/fangwenzheuml.png" alt=""></p>
+<ul>
+<li>Visitor：接口或抽象类，定义了对每一个元素的访问行为，参数就是可访问的元素，方法个数理论上是个元素个数一样的。因此，访问者模式要求被访问的对象结构要稳定，如果经常增删元素，必然会导致频繁修改Visitor接口，就不适合用访问者模式了。</li>
+<li>ConcreteVisitor：具体的访问者，定义具体的对每一个元素的具体访问行为。</li>
+<li>Element：抽象的元素接口或抽象类，定义了一个接待访问者的方法，让每个元素都可以被访问者访问。</li>
+<li>Element，ElementB:具体的元素类，提供接收访问方法的具体实现。这个具体实现通常是调用访问者提供的访问该元素的方法。</li>
+<li>ObjectStructure：定义对象结构，里面维护了一个元素的集合，并且迭代这些元素供访问者访问。</li>
+</ul>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>就举公司的年终考核来说。假设一个公司的基层结构很稳定，就是工程师和经理。那么不同的高层来考核就要访问他们不同的东西。</p>
+<p>工程师和经理是被考核者，可以看成被访问者。CEO和CTO是考核者，他们的考核指标不一样，但都是考核工程师的经理，他们可以看做是访问者。</p>
+<p>CEO访问工程师和经理，要获取他们的KPI作为考核依据。</p>
+<p>CTO访问工程师要获取代码量，访问经理要获取项目个数作为开合依据。</p>
+<p>被访问者，员工的基类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public abstract class Staff &#123;</div><div class="line">    public String name;</div><div class="line">    public int kpi;</div><div class="line"></div><div class="line">    public Staff(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">        kpi = new Random().nextInt(10);</div><div class="line">    &#125;</div><div class="line">//定义一个抽象的受访问方法</div><div class="line">    public abstract void accept(Visitor visitor);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>工程师<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public class Engineer extends Staff &#123;</div><div class="line"></div><div class="line">    public Engineer(String name) &#123;</div><div class="line">        super(name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">//实现受访问方法，里面调用访问者的访问方法。通传参来确定调用Visitor的哪个方法。</div><div class="line">    @Override</div><div class="line">    public void accept(Visitor visitor) &#123;</div><div class="line">        visitor.visit(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getCodeLines()&#123;</div><div class="line">        return new Random().nextInt(1000000);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>经理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Manager extends Staff &#123;</div><div class="line">    public Manager(String name) &#123;</div><div class="line">        super(name);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void accept(Visitor visitor) &#123;</div><div class="line">        visitor.visit(this);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getProducts()&#123;</div><div class="line">        return new Random().nextInt(10);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>访问者的抽象类,为每一个被访问者都提供可一个访问方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public interface Visitor &#123;</div><div class="line">    void visit(Engineer engineer);</div><div class="line">    void visit(Manager manager);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>CTO,实现每一个访问元素的方法，访问不同的元素进行不同的操作,各取所需<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class CTO implements Visitor &#123;</div><div class="line">    @Override</div><div class="line">    public void visit(Engineer engineer) &#123;</div><div class="line">        System.out.println(&quot;我CTO考察工程师&quot;+engineer.name+&quot;的代码量是&quot;+engineer.getCodeLines());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void visit(Manager manager) &#123;</div><div class="line">        System.out.println(&quot;我CTO考察经理&quot;+manager.name+&quot;的产品量是&quot;+manager.getProducts());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>CEO，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class CEO implements Visitor &#123;</div><div class="line">    @Override</div><div class="line">    public void visit(Engineer engineer) &#123;</div><div class="line">        System.out.println(&quot;我CEO考察工程师&quot;+engineer.name+&quot;的KPI是&quot;+engineer.kpi);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void visit(Manager manager) &#123;</div><div class="line">        System.out.println(&quot;我CEO考察经理&quot;+manager.name+&quot;的KPI是&quot;+manager.kpi);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>生成报表，也就是对象结构。内部遍历调用每一个元素的接受访问方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class Report &#123;</div><div class="line">    List&lt;Staff&gt; list = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">    public Report() &#123;</div><div class="line">        list.add(new Engineer(&quot;小王&quot;));</div><div class="line">        list.add(new Engineer(&quot;大王&quot;));</div><div class="line">        list.add(new Engineer(&quot;老王&quot;));</div><div class="line">        list.add(new Manager(&quot;小张&quot;));</div><div class="line">        list.add(new Manager(&quot;大张&quot;));</div><div class="line">        list.add(new Manager(&quot;老张&quot;));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void showReport(Visitor visitor)&#123;</div><div class="line">        for (Staff staff:list) &#123;</div><div class="line">            staff.accept(visitor);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Report report = new Report();</div><div class="line">        report.showReport(new CTO());</div><div class="line">        System.out.println(&quot;---------&quot;);</div><div class="line">        report.showReport(new CEO());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：<br><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/fangwenzheshuchu.png" alt=""></p>
+<p>到这里能感觉到访问者模式最大的好处就是，当被访问者是固定的时候，拓展访问者非常容易。</p>
+<p>比如现在有COO还要进行考核，那么只需实现一个COO实现Visitor接口，实现具体的访问方法。然后在<code>report.showReport(new COO())</code>，就能拿到他需要的内容了，其他地方都不用修改。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>访问者模式适合在访问对象稳定的时候使用。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>角色分离，各司其职，符合单一职责原则</li>
+<li>具有优秀的拓展性</li>
+<li>使数据结构和作用于结构上的操作解耦，是操作集合可以独立变化。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>具体元素对访问者公布细节，违反了迪米特原则。</li>
+<li>具体元素修改的成本太大。</li>
+<li>违反了依赖倒置原则，为了达到区别对待依赖了具体而不是抽象。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十五）-访问者模式/" data-id="cj4hps3gz002edsfygvny7xbn" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/06/Android设计模式（十六）-中介者模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（十六）-中介者模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/05/Android设计模式（十四）-模板方法模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（十四）-模板方法模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="喵了个呜的小宇宙">
+<meta property="og:url" content="http://blog.miaolegewu.top/page/3/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="喵了个呜的小宇宙">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-Android设计模式（十四）-模板方法模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/05/Android设计模式（十四）-模板方法模式/" class="article-date">
+  <time datetime="2017-04-05T06:42:29.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/05/Android设计模式（十四）-模板方法模式/">Android设计模式（十四）-模板方法模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>模板方法模式，名字就很直接，也很容易理解。什么是模板，模板就是一套固定格式。我们可以想象一个普通员工的一天的上班模板：去公司上班-&gt;工作-&gt;下班回家。<br>对于每一个员工来说，这三个步骤的具体内容是不一样的，但是流程都是这样的。</p>
+<p>在开发中也会有这种情况，架构师或者高级开发人员写好一些方法流程，规定方法名，方法输出，执行顺序等等，但是方法体是空的，留给初级的开发人员去填写具体的实现功能。<br>而且这样一套模板用不同的平台语言实现就可以生成不同平台的产品。这些解决方案都可以称为模板方法模式。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/05/Android设计模式（十四）-模板方法模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十四）-模板方法模式/" data-id="cj4hps3h1002ldsfy6kzo7fb7" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（十三）-迭代器模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/05/Android设计模式（十三）-迭代器模式/" class="article-date">
+  <time datetime="2017-04-05T03:21:01.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/05/Android设计模式（十三）-迭代器模式/">Android设计模式（十三）-迭代器模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>迭代器模式又称游标模式，也是行为型设计模式。源于对容器的访问，主要解决容器的遍历操作。</p>
+<p>我们队容器的访问必然会用到遍历。我们可以将遍历的方法封装到容器中，或者不提供遍历方法。如果封装在容器中，容器就承担了过多的功能。如果不提供遍历方法，使用者会自己去实现遍历方法，让容器内部细节暴露无遗。</p>
+<p>因此在访问类和容器之间加上了第三者–迭代器。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/05/Android设计模式（十三）-迭代器模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十三）-迭代器模式/" data-id="cj4hps3gp0026dsfyamepvx34" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（十二）-备忘录模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/05/Android设计模式（十二）-备忘录模式/" class="article-date">
+  <time datetime="2017-04-05T00:26:57.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/05/Android设计模式（十二）-备忘录模式/">Android设计模式（十二）-备忘录模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>备用录模式是一种行为型设计模式，用于保存对象当前的状态，以便之后可以再次恢复到此状态。</p>
+<p>备忘录模式要保证保存的对象状态不能被对象从外部访问，保护好被保存的这些对象状态的完整性以及内部实现不向外部暴露。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态，这样以后就可将该对象恢复到原先保存的状态。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/05/Android设计模式（十二）-备忘录模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十二）-备忘录模式/" data-id="cj4hps3gw002bdsfymazxa0mu" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（十一）-观察者模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/04/Android设计模式（十一）-观察者模式/" class="article-date">
+  <time datetime="2017-04-04T14:19:36.000Z" itemprop="datePublished">2017-04-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/04/Android设计模式（十一）-观察者模式/">Android设计模式（十一）-观察者模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>观察者模式是一种使用频率非常高的设计模式，最常用的地方就是订阅-发布系统。</p>
+<p>这个模式的重要作用就是将观察者和被观察者解耦，使他们之间的依赖更小甚至没有。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>定义对象一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于他的对象都会得到通知并被自动更新。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/04/Android设计模式（十一）-观察者模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/04/Android设计模式（十一）-观察者模式/" data-id="cj4hps3gm0021dsfyxn3vlepn" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（十）-命令模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/01/Android设计模式（十）-命令模式/" class="article-date">
+  <time datetime="2017-04-01T07:16:11.000Z" itemprop="datePublished">2017-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/01/Android设计模式（十）-命令模式/">Android设计模式（十）-命令模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>命令模式是行为型设计模式之一。命令模式没那么多条条框框，所以很灵活。命令模式简单的说就是给他下一个命令，然后他就会执行和这个命令的一系列操作。例如点击电脑的<code>关机</code>命令，系统会执行暂停，保存，关闭等一系列的命令，最后完成关机。</p>
+<p>命令模式也跟关机一样，将一系列方法封装为一个方法，用户只要执行这个方法就会执行封装的一系列方法。不过真正用起来并不是这么直白简单。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>将一个请求封装成一个对象，从而让用户使用不同的请求把客户端参数化；对请求队列或者记录请求日志，以及支持可撤销的操作。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/01/Android设计模式（十）-命令模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/01/Android设计模式（十）-命令模式/" data-id="cj4hps3h3002odsfydnkulkds" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（九）-解释器模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/01/Android设计模式（九）-解释器模式/" class="article-date">
+  <time datetime="2017-04-01T01:17:43.000Z" itemprop="datePublished">2017-04-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/01/Android设计模式（九）-解释器模式/">Android设计模式（九）-解释器模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>解释器模式是一种行为模式，实际开发中用的很少，提供了一种解释语言的语法或表达式的方式。</p>
+<p>定义了一个表达式接口，通过接口解释一个特定的上下文。类似于json解析器按一定的语法解析json的。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>给定一个语言，定义它的文法的一种表示，并定义一个解释器，该解释器使用该表示来解释语言中的句子。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/04/01/Android设计模式（九）-解释器模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/01/Android设计模式（九）-解释器模式/" data-id="cj4hps3g2001ddsfy4mdugub1" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（八）-责任链模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/31/Android设计模式（八）-责任链模式/" class="article-date">
+  <time datetime="2017-03-31T12:50:39.000Z" itemprop="datePublished">2017-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/31/Android设计模式（八）-责任链模式/">Android设计模式（八）-责任链模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>责任链模式是一个行为模式。责任链就是从一个起点发起请求，然后沿着任务链依次传递给每一个节点上的对象，直到有一个节点处理这个请求为止。听着是不是跟Android的事件分发机制很像。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递改请求，直到有对象处理它为止<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/31/Android设计模式（八）-责任链模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/31/Android设计模式（八）-责任链模式/" data-id="cj4hps3gh001udsfyipi5am3s" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（七）-状态模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/31/Android设计模式（七）-状态模式/" class="article-date">
+  <time datetime="2017-03-31T02:56:17.000Z" itemprop="datePublished">2017-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/31/Android设计模式（七）-状态模式/">Android设计模式（七）-状态模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>状态模式看起来和策略模式很像，但是是两个不一样的设计模式。状态模式是一个类根据内部的状态动态的选择行为。策略模式一般用于算法，通过设置不同的策略类来执行不同的算法。状态模式的一个特点就是行为改变状态，而状态又导致行为的变化。策略模式是可以在运行时外部直接策略的，状态模式一般是不能替换的。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>允许对象在内部状态发生改变时改变它的行为，对象看起来好像修改了它的类。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/31/Android设计模式（七）-状态模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/31/Android设计模式（七）-状态模式/" data-id="cj4hps3fv0015dsfyzqr61qar" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（六）-策略模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（六）-策略模式/" class="article-date">
+  <time datetime="2017-03-30T14:02:31.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（六）-策略模式/">Android设计模式（六）-策略模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在开发中几女航遇见下面这种情况：实现同一个功能有很多不停的算法和策略，然后根据实际情况来选择不同的算法和策略。</p>
+<p>一般的做法是在一个类里写不同的方法，然后根据实际情况用一连串的if-else或switch来选择对应的方法。这种方法多了后，这个类会变得臃肿，难以修改。</p>
+<p>所以如果把不同的策略抽象出来，提供一个统一的接口，为每一个策略写一个实现类，这样客户端就能通过调用接口的不同的实现类来动态替换策略。这就是策略模式<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（六）-策略模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（六）-策略模式/" data-id="cj4hps3gj001wdsfywrdwwgrx" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（五）-抽象工厂模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（五）-抽象工厂模式/" class="article-date">
+  <time datetime="2017-03-30T12:52:56.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（五）-抽象工厂模式/">Android设计模式（五）-抽象工厂模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在<a href="http://www.jianshu.com/p/31d1057c079c" target="_blank" rel="external">上一篇的工厂模式中</a>中，工厂生产出来的产品都是实现同一个接口或继承同一个抽象类的。而有时候工厂可以生产出不是同一个接口或抽象类的产品，也就是说生产出来的产品是不确定的，就是抽象工厂了。</p>
+<p><a href="http://blog.csdn.net/qq_25806863/article/details/68063060#t3" target="_blank" rel="external">博客地址</a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>为创建一组相关或相互依赖的对象提供一个接口，而无需指定他们的具体类。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（五）-抽象工厂模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（五）-抽象工厂模式/" data-id="cj4hps3ge001rdsfygx7y8niv" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（四）续：Activity的onCreate是怎么调用的" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（四）续：Activity的onCreate是怎么调用的/" class="article-date">
+  <time datetime="2017-03-30T12:52:02.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（四）续：Activity的onCreate是怎么调用的/">Android设计模式（四）续：Activity的onCreate是怎么调用的</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这里分析的是app第一次启动时的第一个Activity的onCreate()方法的启动流程。</p>
+<h1 id="图"><a href="#图" class="headerlink" title="图"></a>图</h1><p>先贴一下大致的流程图吧，不会画，很丑<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（四）续：Activity的onCreate是怎么调用的/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（四）续：Activity的onCreate是怎么调用的/" data-id="cj4hps3h8002tdsfyrijqjfss" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（四）-工厂方法模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（四）-工厂方法模式/" class="article-date">
+  <time datetime="2017-03-30T12:51:02.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（四）-工厂方法模式/">Android设计模式（四）- 工厂方法模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>工厂方法模式也是创建型模式。<br>工厂模式根据抽象程度可以分为三种：简单工厂模式，工厂方法模式，抽象工厂模式。</p>
+<p><a href="http://blog.csdn.net/qq_25806863/article/details/67110082" target="_blank" rel="external">博客地址</a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>定义一个用于创建对象的接口，让子类决定实例化哪一个类。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（四）-工厂方法模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（四）-工厂方法模式/" data-id="cj4hps3h7002qdsfyan0hshq1" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（三）-原型模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（三）-原型模式/" class="article-date">
+  <time datetime="2017-03-30T12:49:03.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（三）-原型模式/">Android设计模式（三）- 原型模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://blog.csdn.net/qq_25806863/article/details/66972873" target="_blank" rel="external">博客地址</a><br>原型模式也是一种创建型设计模式，从名字就能理解，这个模式应该有一个样板实例，也就是原型，然后用户从这个原型中复制出一个内部属性一致的实例，也就是克隆。<br>有时，一个对象的构造比较复杂并且比较耗时时，直接从已有对象复制一个实例比重新构造出来更高效。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>用原型实例指定创建对象的种类，并通过拷贝这些原型创建新的对象。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（三）-原型模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（三）-原型模式/" data-id="cj4hps3g00018dsfy461xdv8i" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（二）-续：WindowManager" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（二）-续：WindowManager/" class="article-date">
+  <time datetime="2017-03-30T12:48:06.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（二）-续：WindowManager/">Android设计模式（二） 续：WindowManager</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://blog.csdn.net/qq_25806863/article/details/66530372" target="_blank" rel="external">博客地址</a><br>通过前面的分析可以知道，Android系统中，所有的界面内容显示都是通过Window来实现的，包括Activity，Dialog，Toast等。<br>先初步分析一下Window，WindowManager，WindowManagerService的关系。</p>
+<h1 id="获取WindowManager"><a href="#获取WindowManager" class="headerlink" title="获取WindowManager"></a>获取WindowManager</h1><p>从<a href="http://www.jianshu.com/p/0cdd78f01237" target="_blank" rel="external">Android设计模式（一）-单例模式</a>中后面的内容可以看到，系统在启动的时候就注册了许多服务。其中就有这样的代码：<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（二）-续：WindowManager/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（二）-续：WindowManager/" data-id="cj4hps3gb001pdsfyonw6h6jc" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（二）-Builder模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（二）-Builder模式/" class="article-date">
+  <time datetime="2017-03-30T12:47:16.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（二）-Builder模式/">Android设计模式（二）- Builder模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://blog.csdn.net/qq_25806863/article/details/66477142" target="_blank" rel="external">博客地址</a><br>Builder模式是一步一步创建复杂对象的创建型模式。允许用户在不知道内部构建细节的情况下，可以更精细的控制构造流程。该模式是为了将构建过程和表示分开，使构建过程和部件都可以自由扩展，两者的耦合度也降到最低。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（二）-Builder模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（二）-Builder模式/" data-id="cj4hps3g9001ndsfyb3f3hwb7" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（一）续：LayoutInflater" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（一）续：LayoutInflater/" class="article-date">
+  <time datetime="2017-03-30T12:46:07.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（一）续：LayoutInflater/">Android设计模式（一）续：LayoutInflater</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="PhoneLayoutInflater"><a href="#PhoneLayoutInflater" class="headerlink" title="PhoneLayoutInflater"></a>PhoneLayoutInflater</h1>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（一）续：LayoutInflater/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（一）续：LayoutInflater/" data-id="cj4hps3fu0013dsfycl3dsr67" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式（一）-单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式（一）-单例模式/" class="article-date">
+  <time datetime="2017-03-30T12:45:18.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式（一）-单例模式/">Android设计模式（一）-单例模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://blog.csdn.net/qq_25806863/article/details/66236371" target="_blank" rel="external">博客地址</a><br>最近在看《Android源码设计模式解析与实战》这本书，发现里面还有对源码的一些分析，之前也没好好看过设计模式，就来做个笔记，跟着看一下。<br>包括设计模式和一些源码分析。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式（一）-单例模式/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式（一）-单例模式/" data-id="cj4hps3fs000ydsfy9aa1mt9k" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android设计模式-面向对象六大原则" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android设计模式-面向对象六大原则/" class="article-date">
+  <time datetime="2017-03-30T12:44:15.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android设计模式-面向对象六大原则/">Android设计模式-面向对象六大原则</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>最终就是 抽象 单一直则 最小化</p>
+<h1 id="单一职责原则-Single-Responsibility-Principle"><a href="#单一职责原则-Single-Responsibility-Principle" class="headerlink" title="单一职责原则(Single Responsibility Principle)"></a>单一职责原则(Single Responsibility Principle)</h1><h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>简称SPR 一个类只做一件事.</p>
+<p>并不是说一个类只有一个函数,而是说这个类中的所有函数必须是高度相关的.高内聚.<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android设计模式-面向对象六大原则/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android设计模式-面向对象六大原则/" data-id="cj4hps3ft0010dsfy14i679y7" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android文字识别tesseract-ocr-训练样本库-识别字库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/Android文字识别tesseract-ocr-训练样本库-识别字库/" class="article-date">
+  <time datetime="2017-03-30T12:31:16.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/Android文字识别tesseract-ocr-训练样本库-识别字库/">Android文字识别tesseract ocr -训练样本库 识别字库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在上一篇文章<a href="http://www.jianshu.com/p/cc9ae05423a8" target="_blank" rel="external">tess_two Android图片文字识别</a>中，使用tess_two完成了简单的文字识别。<br><a href="http://blog.csdn.net/qq_25806863/article/details/67637567" target="_blank" rel="external">博客地址</a><br>但是发现一个很明显的问题是，默认的识别速度比较慢。识别四个很明显的字需要将近两秒。<br><a href="https://github.com/wangyisll/TessTwoDemo" target="_blank" rel="external">DemoGitHub</a>可以试试。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/Android文字识别tesseract-ocr-训练样本库-识别字库/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/Android文字识别tesseract-ocr-训练样本库-识别字库/" data-id="cj4hps3fk000odsfyevdlqkpq" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/文字识别/">文字识别</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tess-two-Android图片文字识别" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/30/tess-two-Android图片文字识别/" class="article-date">
+  <time datetime="2017-03-30T12:30:21.000Z" itemprop="datePublished">2017-03-30</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/30/tess-two-Android图片文字识别/">tess_two Android图片文字识别</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>文字识别一般都用的tesseract-ocr。<br>GitHub：<a href="https://github.com/tesseract-ocr/tesseract" target="_blank" rel="external">https://github.com/tesseract-ocr/tesseract</a><br>而Android对应的比较推荐的有个tess-two。<br>GitHub：<a href="https://github.com/rmtheis/tess-two" target="_blank" rel="external">https://github.com/rmtheis/tess-two</a><br>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/30/tess-two-Android图片文字识别/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/30/tess-two-Android图片文字识别/" data-id="cj4hps3hm003kdsfywwscedpc" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/文字识别/">文字识别</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">__('next') &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

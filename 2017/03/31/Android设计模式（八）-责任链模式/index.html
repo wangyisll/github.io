@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（八）-责任链模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="责任链模式是一个行为模式。责任链就是从一个起点发起请求，然后沿着任务链依次传递给每一个节点上的对象，直到有一个节点处理这个请求为止。听着是不是跟Android的事件分发机制很像。 定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递改请求，直到有对象处理它为止">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（八）-责任链模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/03/31/Android设计模式（八）-责任链模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="责任链模式是一个行为模式。责任链就是从一个起点发起请求，然后沿着任务链依次传递给每一个节点上的对象，直到有一个节点处理这个请求为止。听着是不是跟Android的事件分发机制很像。 定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递改请求，直到有对象处理它为止">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BEUML.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zerenlianshuchu.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zerenlianuml2.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BE%E8%BE%93%E5%87%BA2.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BE%E8%BE%93%E5%87%BA3.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（八）-责任链模式">
+<meta name="twitter:description" content="责任链模式是一个行为模式。责任链就是从一个起点发起请求，然后沿着任务链依次传递给每一个节点上的对象，直到有一个节点处理这个请求为止。听着是不是跟Android的事件分发机制很像。 定义使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递改请求，直到有对象处理它为止">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BEUML.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（八）-责任链模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/31/Android设计模式（八）-责任链模式/" class="article-date">
+  <time datetime="2017-03-31T12:50:39.000Z" itemprop="datePublished">2017-03-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（八）-责任链模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>责任链模式是一个行为模式。责任链就是从一个起点发起请求，然后沿着任务链依次传递给每一个节点上的对象，直到有一个节点处理这个请求为止。听着是不是跟Android的事件分发机制很像。</p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>使多个对象都有机会处理请求，从而避免了请求的发送者和接受者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递改请求，直到有对象处理它为止<br><a id="more"></a></p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>多个对象可以处理统一请求，但具体谁处理在运行时动态决定。</li>
+<li>在请求的处理者不明确的情况下，向多个对象的一个提交请求。</li>
+<li>需要动态指定一组对象处理请求。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><h2 id="简单版"><a href="#简单版" class="headerlink" title="简单版"></a>简单版</h2><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BEUML.png" alt=""></p>
+<ul>
+<li>Handler：抽象处理者角色，声明一个处理请求的方法，并保持对下一个处理节点Handler对象的引用。</li>
+<li>ConcreteHandler: 具体的处理者，对请求进行处理，如果不处理就讲请求转发给下一个节点上的处理对象。</li>
+</ul>
+<p>模板代码：</p>
+<p>抽象处理者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public abstract class Handler &#123;</div><div class="line">    protected Handler successor;</div><div class="line">    public abstract void handleRequest(String condition);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>实际处理者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class ConcreteHandler1 extends Handler &#123;</div><div class="line">    @Override</div><div class="line">    public void handleRequest(String condition) &#123;</div><div class="line">        if (&quot;ConcreteHandler1&quot;.equals(condition))&#123;</div><div class="line">            System.out.println(&quot;ConcreteHandler1 handled&quot;);</div><div class="line">            return;</div><div class="line">        &#125;else &#123;</div><div class="line">            successor.handleRequest(condition);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class ConcreteHandler2 extends Handler &#123;</div><div class="line">    @Override</div><div class="line">    public void handleRequest(String condition) &#123;</div><div class="line">        if (&quot;ConcreteHandler2&quot;.equals(condition)) &#123;</div><div class="line">            System.out.println(&quot;ConcreteHandler2 handled&quot;);</div><div class="line">            return;</div><div class="line">        &#125; else &#123;</div><div class="line">            successor.handleRequest(condition);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>客户端调用,组成一条责任链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        ConcreteHandler1 concreteHandler1 = new ConcreteHandler1();</div><div class="line">        ConcreteHandler2 concreteHandler2 = new ConcreteHandler2();</div><div class="line">        concreteHandler1.successor = concreteHandler2;</div><div class="line">        concreteHandler2.successor = concreteHandler1;</div><div class="line">        concreteHandler1.handleRequest(&quot;ConcreteHandler2&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出：<br><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zerenlianshuchu.png" alt=""></p>
+<h2 id="复杂版"><a href="#复杂版" class="headerlink" title="复杂版"></a>复杂版</h2><p>简单版中，传递的都是统一的字符串，处理也比较简单。但是在实际开发中，责任链中的请求处理规则是不尽相同的，这种时候需要对请求进行封装，同时对请求的处理规则也进行一个封装，</p>
+<p>类图如下</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/zerenlianuml2.png" alt=""></p>
+<p>抽象处理者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public abstract class AbstractHandler &#123;</div><div class="line">    protected AbstractHandler nextHandler;</div><div class="line"></div><div class="line">    public final void handleRequest(AbstractRequest request)&#123;</div><div class="line">        if (request.getRequestLevel()==getHandleLevel())&#123;</div><div class="line">            handle(request);</div><div class="line">        &#125;else &#123;</div><div class="line">            if (nextHandler!=null)&#123;</div><div class="line">                nextHandler.handleRequest(request);</div><div class="line">            &#125;else &#123;</div><div class="line">                System.out.println(&quot;没有对象能处理这个请求&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    protected abstract int getHandleLevel();</div><div class="line">    protected abstract void handle(AbstractRequest request);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象请求者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public abstract class AbstractRequest &#123;</div><div class="line">    private Object obj;</div><div class="line">    public AbstractRequest(Object obj)&#123;</div><div class="line">        this.obj=obj;</div><div class="line">    &#125;</div><div class="line">    public Object getContent()&#123;</div><div class="line">        return obj;</div><div class="line">    &#125;</div><div class="line">    public abstract int getRequestLevel();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>实现的三个请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request1 extends AbstractRequest &#123;</div><div class="line">    public Request1(Object obj) &#123;</div><div class="line">        super(obj);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 1;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request2 extends AbstractRequest &#123;</div><div class="line">    public Request2(Object obj) &#123;</div><div class="line">        super(obj);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 2;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class Request3 extends AbstractRequest &#123;</div><div class="line">    public Request3(Object obj) &#123;</div><div class="line">        super(obj);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public int getRequestLevel() &#123;</div><div class="line">        return 3;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>三个处理者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler1 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 1;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler1处理了请求：&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler2 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 2;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler2处理了请求：&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Handler3 extends AbstractHandler &#123;</div><div class="line">    @Override</div><div class="line">    protected int getHandleLevel() &#123;</div><div class="line">        return 3;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void handle(AbstractRequest request) &#123;</div><div class="line">        System.out.println(&quot;Handler3处理了请求：&quot;+request.getRequestLevel());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>客户端调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        //构造三个处理对象</div><div class="line">        AbstractHandler handler1 = new Handler1();</div><div class="line">        AbstractHandler handler2 = new Handler2();</div><div class="line">        AbstractHandler handler3 = new Handler3();</div><div class="line">        //串成一个责任链</div><div class="line">        handler1.nextHandler=handler2;</div><div class="line">        handler2.nextHandler=handler3;</div><div class="line">        //构造三个请求</div><div class="line">        AbstractRequest request1 = new Request1(&quot;A&quot;);</div><div class="line">        AbstractRequest request2 = new Request2(&quot;B&quot;);</div><div class="line">        AbstractRequest request3 = new Request3(&quot;C&quot;);</div><div class="line"></div><div class="line">        handler1.handleRequest(request1);</div><div class="line">        handler1.handleRequest(request2);</div><div class="line">        handler1.handleRequest(request3);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BE%E8%BE%93%E5%87%BA2.png" alt=""></p>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>现实中最适合责任链的应该就是部门领导之间的上报请求了。比如员工要申请一笔资金，会先向组长申请，额度如果在组长的范围内，组长就批了，组长权限不够就向主管申请，主管如果也额度不够就向经理申请。这就形成了个责任链。</p>
+<p>组长，主管，经理。每个人都是责任链上的一个节点。一个请求被层层转达，知道被处理或没有一个人能处理。普通员工，就是那个申请的发起者并不需要知道到底最后是谁审批的，他只要拿到钱就行了。这样就造成了请求者和处理者的解耦。</p>
+<p>抽象的领导<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">public abstract class Leader &#123;</div><div class="line">    protected Leader nextLeader;</div><div class="line">    public final void handleRequest(int money)&#123;</div><div class="line">        if (money&lt;=getLimit())&#123;</div><div class="line">            handle(money);</div><div class="line">        &#125;else &#123;</div><div class="line">            if (nextLeader!=null)&#123;</div><div class="line">                nextLeader.handleRequest(money);</div><div class="line">            &#125;else &#123;</div><div class="line">                System.out.println(money+&quot;没人能批准&quot;);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    public abstract int getLimit();</div><div class="line">    public abstract void handle(int money);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>三个具体的领导<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class GroupLeader extends Leader &#123;</div><div class="line">    @Override</div><div class="line">    public int getLimit() &#123;</div><div class="line">        return 5000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void handle(int money) &#123;</div><div class="line">        System.out.println(money+&quot;由组长批准&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Director extends Leader &#123;</div><div class="line">    @Override</div><div class="line">    public int getLimit() &#123;</div><div class="line">        return 10000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void handle(int money) &#123;</div><div class="line">        System.out.println(money+&quot;由主管批准&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Manager extends Leader &#123;</div><div class="line">    @Override</div><div class="line">    public int getLimit() &#123;</div><div class="line">        return 20000;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void handle(int money) &#123;</div><div class="line">        System.out.println(money+&quot;由经理批准&quot;);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>员工申请：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class A &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Leader groupLeader = new GroupLeader();</div><div class="line">        Leader director = new Director();</div><div class="line">        Leader manager = new Manager();</div><div class="line">        groupLeader.nextLeader = director;</div><div class="line">        director.nextLeader = manager;</div><div class="line"></div><div class="line">        groupLeader.handleRequest(5000);</div><div class="line">        groupLeader.handleRequest(9000);</div><div class="line">        groupLeader.handleRequest(12000);</div><div class="line">        groupLeader.handleRequest(30000);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出:</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/%E8%B4%A3%E4%BB%BB%E9%93%BE%E8%BE%93%E5%87%BA3.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>降低耦合度，便于拓展，提高代码灵活性。</li>
+<li>责任链对象互相链接，只用想头部发起请求。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>如果责任链太长，或者每条链判断处理的时间太长会影响性能。特别是递归循环的时候。</li>
+<li>请求不一定能得到处理，可能会没有对象处理。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/03/31/Android设计模式（八）-责任链模式/" data-id="cj4hps3gh001udsfyipi5am3s" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/01/Android设计模式（九）-解释器模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（九）-解释器模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/31/Android设计模式（七）-状态模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（七）-状态模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

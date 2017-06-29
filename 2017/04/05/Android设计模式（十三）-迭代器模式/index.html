@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android设计模式（十三）-迭代器模式 | 喵了个呜的小宇宙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="迭代器模式又称游标模式，也是行为型设计模式。源于对容器的访问，主要解决容器的遍历操作。 我们队容器的访问必然会用到遍历。我们可以将遍历的方法封装到容器中，或者不提供遍历方法。如果封装在容器中，容器就承担了过多的功能。如果不提供遍历方法，使用者会自己去实现遍历方法，让容器内部细节暴露无遗。 因此在访问类和容器之间加上了第三者–迭代器。">
+<meta name="keywords" content="Android,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android设计模式（十三）-迭代器模式">
+<meta property="og:url" content="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十三）-迭代器模式/index.html">
+<meta property="og:site_name" content="喵了个呜的小宇宙">
+<meta property="og:description" content="迭代器模式又称游标模式，也是行为型设计模式。源于对容器的访问，主要解决容器的遍历操作。 我们队容器的访问必然会用到遍历。我们可以将遍历的方法封装到容器中，或者不提供遍历方法。如果封装在容器中，容器就承担了过多的功能。如果不提供遍历方法，使用者会自己去实现遍历方法，让容器内部细节暴露无遗。 因此在访问类和容器之间加上了第三者–迭代器。">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/diedaiqiuml.png">
+<meta property="og:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/diedaiqishuchu1.png">
+<meta property="og:updated_time" content="2017-06-29T00:29:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android设计模式（十三）-迭代器模式">
+<meta name="twitter:description" content="迭代器模式又称游标模式，也是行为型设计模式。源于对容器的访问，主要解决容器的遍历操作。 我们队容器的访问必然会用到遍历。我们可以将遍历的方法封装到容器中，或者不提供遍历方法。如果封装在容器中，容器就承担了过多的功能。如果不提供遍历方法，使用者会自己去实现遍历方法，让容器内部细节暴露无遗。 因此在访问类和容器之间加上了第三者–迭代器。">
+<meta name="twitter:image" content="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/diedaiqiuml.png">
+  
+    <link rel="alternate" href="/atom.xml" title="喵了个呜的小宇宙" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">喵了个呜的小宇宙</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.miaolegewu.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Android设计模式（十三）-迭代器模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/04/05/Android设计模式（十三）-迭代器模式/" class="article-date">
+  <time datetime="2017-04-05T03:21:01.000Z" itemprop="datePublished">2017-04-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android设计模式（十三）-迭代器模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>迭代器模式又称游标模式，也是行为型设计模式。源于对容器的访问，主要解决容器的遍历操作。</p>
+<p>我们队容器的访问必然会用到遍历。我们可以将遍历的方法封装到容器中，或者不提供遍历方法。如果封装在容器中，容器就承担了过多的功能。如果不提供遍历方法，使用者会自己去实现遍历方法，让容器内部细节暴露无遗。</p>
+<p>因此在访问类和容器之间加上了第三者–迭代器。<br><a id="more"></a></p>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>提供一种方法访问一个容器对象中各个元素，而又不暴露该对象的内部细节。</p>
+<h1 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h1><ul>
+<li>遍历一个容器对象时。</li>
+</ul>
+<h1 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h1><p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/diedaiqiuml.png" alt=""></p>
+<ul>
+<li>Iterator : 迭代器接口，负责定义、访问、遍历元素的接口。</li>
+<li>ConcreteIterator:具体的迭代类，实现迭代器接口，并记录遍历的当前位置。</li>
+<li>Aggregate：容器接口，负责提供创建具体迭代器的接口。</li>
+<li>ConcreteAggregate：具体容器类，和具体迭代器相关联。</li>
+</ul>
+<h1 id="模板代码"><a href="#模板代码" class="headerlink" title="模板代码"></a>模板代码</h1><p>抽象的迭代器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public interface Iterator&lt;T&gt;&#123;</div><div class="line">    boolean hasNext();</div><div class="line">    T next();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的迭代器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class ConcreteIterator&lt;T&gt; implements Iterator&lt;T&gt; &#123;</div><div class="line">    private  List&lt;T&gt; list = new ArrayList&lt;&gt;();</div><div class="line">    private int cursor = 0;</div><div class="line"></div><div class="line">    public ConcreteIterator(List&lt;T&gt; list) &#123;</div><div class="line">        this.list = list;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean hasNext() &#123;</div><div class="line">        return cursor!=list.size();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public T next() &#123;</div><div class="line">        T obj = null;</div><div class="line">        if (this.hasNext())&#123;</div><div class="line">            obj = list.get(cursor++);</div><div class="line">        &#125;</div><div class="line">        return obj;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>抽象的容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public interface Aggregate&lt;T&gt; &#123;</div><div class="line">    void add(T obj);</div><div class="line">    void remove(T obj);</div><div class="line">    Iterator&lt;T&gt; iterator();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>具体的容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public class ConcreteAggregate&lt;T&gt; implements Aggregate&lt;T&gt; &#123;</div><div class="line">    private List&lt;T&gt; list = new ArrayList&lt;&gt;();</div><div class="line">    @Override</div><div class="line">    public void add(T obj) &#123;</div><div class="line">        list.add(obj);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void remove(T obj) &#123;</div><div class="line">        list.remove(obj);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Iterator&lt;T&gt; iterator() &#123;</div><div class="line">        return new ConcreteIterator&lt;&gt;(list);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>客户端调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class Client &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        Aggregate aggregate = new ConcreteAggregate();</div><div class="line">        aggregate.add(&quot;a&quot;);</div><div class="line">        aggregate.add(&quot;r&quot;);</div><div class="line">        aggregate.add(&quot;f&quot;);</div><div class="line">        aggregate.add(&quot;w&quot;);</div><div class="line">        aggregate.add(&quot;e&quot;);</div><div class="line">        Iterator iterator = aggregate.iterator();</div><div class="line">        while (iterator.hasNext())&#123;</div><div class="line">            System.out.println(iterator.next());</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>输出</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/Sjms/diedaiqishuchu1.png" alt=""></p>
+<h1 id="简单实现"><a href="#简单实现" class="headerlink" title="简单实现"></a>简单实现</h1><p>可以直接用上面的模板代码，集合是泛型，存什么都可以。因为迭代器就是用来遍历的。</p>
+<h1 id="Android中的迭代器模式"><a href="#Android中的迭代器模式" class="headerlink" title="Android中的迭代器模式"></a>Android中的迭代器模式</h1><p>其实在上面的例子中用List来存储本来就是不合适的。因为Java本身提供的容器都已经提供了相应的迭代器。所以在开发中，我们基本不需要亲自去实现。</p>
+<p>Android中的迭代器例子有一个是SQLite数据库的查询了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null,SQLiteDatabase.OPEN_READWRITE);</div><div class="line">Cursor cursor = db.rawQuery(&quot;select * from android_basic , 15&quot;,null);</div></pre></td></tr></table></figure>
+<p>返回的是一个Cursor对象，这个对象实质是其实就是个迭代器。看看他的用法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">while (cursor.moveToNext())&#123;//遍历读取数据</div><div class="line">            ......</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>迭代器就是把容器中遍历对象的功能提取出来，这样既不暴露容器的细节，又可以让外部访问容器内部的内容。</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>支持不同的方式去遍历一个容器，也可以有多个遍历，弱化了容器和遍历算法之间的关系。</li>
+<li>不用用户自己去实现遍历功能，也分离了容器和遍历算法，避免了容器承担过多功能。</li>
+<li>封装性更好，方便修改遍历算法而不用修改容器。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>类文件会增加，所以对于简单的遍历来说不是很重要。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.miaolegewu.top/2017/04/05/Android设计模式（十三）-迭代器模式/" data-id="cj4hps3gp0026dsfyamepvx34" class="article-share-link">Delen</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/04/05/Android设计模式（十四）-模板方法模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Nieuwer</strong>
+      <div class="article-nav-title">
+        
+          Android设计模式（十四）-模板方法模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/04/05/Android设计模式（十二）-备忘录模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ouder</strong>
+      <div class="article-nav-title">Android设计模式（十二）-备忘录模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Labels</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kotlin/">Kotlin</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字识别/">文字识别</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码/">源码</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本控制/">版本控制</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻墙/">翻墙</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Kotlin/" style="font-size: 11.43px;">Kotlin</a> <a href="/tags/java/" style="font-size: 14.29px;">java</a> <a href="/tags/动画/" style="font-size: 17.14px;">动画</a> <a href="/tags/多线程/" style="font-size: 15.71px;">多线程</a> <a href="/tags/工具/" style="font-size: 12.86px;">工具</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/文字识别/" style="font-size: 11.43px;">文字识别</a> <a href="/tags/源码/" style="font-size: 10px;">源码</a> <a href="/tags/版本控制/" style="font-size: 10px;">版本控制</a> <a href="/tags/翻墙/" style="font-size: 10px;">翻墙</a> <a href="/tags/设计模式/" style="font-size: 18.57px;">设计模式</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archieven</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recente berichten</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/27/ADB常用命令/">ADB常用命令</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/15/Kotlin让属性只能被赋值一次且不能为空/">Kotlin让属性只能被赋值一次且不能为空</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/14/对一个KotlinAPP的copy/">对一个KotlinAPP的copy</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 喵了个呜<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
