@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="null"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>关于散列Hash的一点笔记 | 喵了个呜的小宇宙</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">关于散列Hash的一点笔记</h1><a id="logo" href="/.">喵了个呜的小宇宙</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/about/"><i class="fa fa-user"> Über</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Search"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">关于散列Hash的一点笔记</h1><div class="post-meta"><span class="date">Aug 24, 2017</span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i> Hits</i></i></span><a href="/2017/08/24/关于散列Hash的一点笔记/#comments" class="comment-count">Gästebuch</a></div><div class="post-content"><h1 id="散列"><a href="#散列" class="headerlink" title="散列"></a>散列</h1><p>散列表的实现通常叫<strong>散列</strong>，散列是一种用于以常数平均时间执行插入，删除，查找的技术。</p>
+<h2 id="1-一般想法"><a href="#1-一般想法" class="headerlink" title="1.一般想法"></a>1.一般想法</h2><ul>
+<li>理想的散列结构是一个包含有一些项的具有固定大小的数组。</li>
+<li>这些项由一些关键字和数据域组成。</li>
+</ul>
+<p>假设一个表大小为size，那么每个关键字被映射到从0到size-1这个范围中的某个数，并放着适当的单元中，这个映射就叫做<strong>散列函数</strong>。</p>
+<p>理想情况下，他应该计算起来简单，并保证任何两个不同的关键字映射到不同的单元。。。。<strong>不过，这是不可能的</strong>，-因为单元的数目是有限的，而关键字实际上是用不完的。</p>
+<ul>
+<li>因此，要寻找一个散列函数，这个函数要能在单元间均匀地分配关键字。</li>
+</ul>
+<p>所以关键就是散列函数，以及将两个关键字散列到同一个值的时候该怎么解决这个冲突。</p>
+<h2 id="2-散列函数"><a href="#2-散列函数" class="headerlink" title="2.散列函数"></a>2.散列函数</h2><p>散列函数主要是将一个key通过计算生成一个散列值，key是不能重复的，但生层的散列值可能会一样，散列函数要尽量保证了生成的散列值不同且在范围内均匀分布。</p>
+<ul>
+<li><p>如果key是整数，那么一般的方法是直接返回这个<strong>key除以tableSize的余数</strong>，</p>
+<p>因此tableSize最好用素数，这样能避免出现大量的重复结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> tableSize)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> key % tableSize;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>通常关键字key是字符串，这时有几个散列函数的选择：</p>
+<ol>
+<li><p>把字符串中ASCII值加起来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode1</span><span class="params">(String key, <span class="keyword">int</span> tableSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> hashCode = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; key.length(); i++) &#123;</div><div class="line">        hashCode += key.charAt(i);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> hashCode % tableSize;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>假设表大小是10007，是素数，并设所有关键字最多8个字符，ASCII字符的值最大为127，那么散列值只能在0和1017（128*8）之间，明显分配不均</p>
+</li>
+<li><p>假设至少有三个字符</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode2</span><span class="params">(String key, <span class="keyword">int</span> tableSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> hashCode = <span class="number">0</span>;</div><div class="line">    hashCode = key.charAt(<span class="number">0</span>) + <span class="number">27</span> * key.charAt(<span class="number">1</span>) + <span class="number">27</span> * <span class="number">27</span> * key.charAt(<span class="number">2</span>);</div><div class="line">    <span class="keyword">return</span> hashCode % tableSize;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>涉及到key中的所有字符，一般分布的很好。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode3</span><span class="params">(String key, <span class="keyword">int</span> tableSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> hashCode = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; key.length(); i++) &#123;</div><div class="line">        hashCode = <span class="number">37</span>*hashCode+key.charAt(i);</div><div class="line">    &#125;</div><div class="line">    hashCode%=tableSize;</div><div class="line">    <span class="keyword">if</span> (hashCode&lt;<span class="number">0</span>)&#123;</div><div class="line">        hashCode+=tableSize;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> hashCode;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>String类中的hashCode</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> h = hash;</div><div class="line">    <span class="keyword">if</span> (h == <span class="number">0</span> &amp;&amp; value.length &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">char</span> val[] = value;</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; value.length; i++) &#123;</div><div class="line">            h = <span class="number">31</span> * h + val[i];</div><div class="line">        &#125;</div><div class="line">        hash = h;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> h;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>剩下的就是解决冲入的问题了。</p>
+<h2 id="3-解决冲突"><a href="#3-解决冲突" class="headerlink" title="3.解决冲突"></a>3.解决冲突</h2><h3 id="1-分离链接法"><a href="#1-分离链接法" class="headerlink" title="1.分离链接法"></a>1.分离链接法</h3><p>将散列到同一个值的所有元素保存在一个表中。</p>
+<p>使用下面的散列函数，并让表大小为10 ,不是素数，所以很容易产生重复的散列值：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> key % <span class="number">10</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如 <code>hashCode(26) =6</code> </p>
+<p>插入 12，32，44，24，76，34，49，90：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/sjjg/hash1.png" alt=""></p>
+<p>要执行一次查找，先用散列函数确定所在的链表，然后遍历这个链表。</p>
+<p>要执行一次插入，先用散列函数确定要插入的链表，然后查到这个链表的前端。因为新数据经常会被访问。</p>
+<h4 id="填装因子"><a href="#填装因子" class="headerlink" title="填装因子"></a>填装因子</h4><ul>
+<li><p>填装因子=散列表总元素的个数/散列表的大小。</p>
+<p>可以理解为平均一个位置会有多少元素。当填装因子为1时，平均一个位置上一个元素。</p>
+</li>
+<li><p>在使用分离链接法的散列表中，执行一次查找锁需要的时间=计算散列函数值的时间+遍历链表的时间。，所以链表越短，速度越快。</p>
+<p>使用分离连接法时，一般要使填装因子接近1，也就是尽量一个位置上只有一个元素。，当填装因子大于1时，就要通过扩大散列表的大小来降低填装因子。</p>
+</li>
+<li><p>对于不适用分离连接法的散列表来说，填装因子应该低于0.5。</p>
+</li>
+</ul>
+<h3 id="2-开放定址法"><a href="#2-开放定址法" class="headerlink" title="2.开放定址法"></a>2.开放定址法</h3><p><strong>分离链接法的缺</strong>点是使用了链表，个新单元分配地址需要时间，而且需要第二种数据机构的实现。</p>
+<p>另一中不需要链表的解决冲突的方法就是尝试寻找另一个空的位置来存放元素。</p>
+<p>所以不适用分离连接法的散列表的填装因子要小，应该低于0.5.</p>
+<p>这种表叫探测散列表。</p>
+<ul>
+<li><p>一般当h_1(x)地址上没空时，选h_2(x),h_2(x)地址上也有值时，选h_3(x)，。。。</p>
+<p>这一系列函数的关系是<br>$$<br>h_i(x) =(hash(x)+f(i)) \mod  tableSize<br>$$<br>其中的f(i)就是解决冲突的方法。下面有三种：</p>
+</li>
+</ul>
+<h4 id="2-1-线性探测法"><a href="#2-1-线性探测法" class="headerlink" title="2.1 线性探测法"></a>2.1 线性探测法</h4><p>f(i)是线性函数，<br>$$<br>f(i) = i<br>$$<br>f(0) = 0 ;</p>
+<p>这相当于逐个探测单元（到头时可以回绕），直到查找到一个空的单元。</p>
+<p>比如还是用下面的散列函数 插入插入 12，32，44，24，76，34，49，90：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> key % <span class="number">10</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">位置</th>
+<th style="text-align:center">空表</th>
+<th style="text-align:center">插入12</th>
+<th style="text-align:center">插入32</th>
+<th style="text-align:center">插入44</th>
+<th style="text-align:center">插入24</th>
+<th style="text-align:center">插入76</th>
+<th style="text-align:center">插入34</th>
+<th style="text-align:center">插入49</th>
+<th style="text-align:center">插入90</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">90</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">12</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+<td style="text-align:center">32</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">44</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">24</td>
+<td style="text-align:center">24</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">76</td>
+<td style="text-align:center">76</td>
+<td style="text-align:center">76</td>
+<td style="text-align:center">76</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">34</td>
+<td style="text-align:center">34</td>
+<td style="text-align:center">34</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">49</td>
+<td style="text-align:center">49</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><p>在插入12的时候散列表式空的，通过散列函数计算得到的位置是2，位置2上没有值，就把12放在位置2上</p>
+</li>
+<li><p>插入第二个数32的时候，散列函数的结果也是2，但是位置2上已经有12了，所以往下进行探测，下一个位置的计算方法是：<br>$$<br>hash(32) = 2  \<br>第一个位置： h_0(32) = (hash(32)+f(0)) \mod 10  =2 \<br>但是位置2上已经被12占用了，所以就要寻找下一个位置：\<br>第二个位置：h_1(32)=(hash(32)+f(1)) \mod 10 = 3\<br>位置3上刚好有空，就把32放在位置3上了，完成插入。<br>$$</p>
+</li>
+</ol>
+<p>可以想象，当这个散列表的空位不多的时候，插入一个数据经常要探测很多个位置才能找到一个空位，所以这个散列表要求填装因子第一次点，低于0.5的时候，插入和查询是探测的次数会大大减少。</p>
+<h4 id="2-2-平方探测法"><a href="#2-2-平方探测法" class="headerlink" title="2.2 平方探测法"></a>2.2 平方探测法</h4><p>f(i)是二次函数，<br>$$<br>f(i) = i^2<br>$$</p>
+<p>$$<br>h_i(x) =(hash(x)+f(i)) \mod  tableSize<br>$$</p>
+<p>这个方法有个<strong>缺陷</strong>是，第一次散列的位置相同时，那么他们接下来的探测位置也会相同，后面那个会把前面那个谈错过的位置再探测一遍。</p>
+<p>使用双散列可以解决这个，不过要付出计算一个附加的散列函数的代价。</p>
+<ul>
+<li>使用平方探测且表的大小是素数时，那么当表至少有一半是空的时候，总能插入一个新元素。</li>
+</ul>
+<h4 id="2-3-双散列法"><a href="#2-3-双散列法" class="headerlink" title="2.3 双散列法"></a>2.3 双散列法</h4><p>双散列流行的公式是：<br>$$<br>f(i) = i·hash_2(x)<br>$$<br>其中hash_2(x)是另外一个散列函数，在第一册散列得到位置后，如果这个位置不是空的，那么就移动到1*hash__2(x)位置，这个位置再被占用就移动到2*hash__2(x)位置。</p>
+<p>这里第二个散列函数hash_2(x)就很重要了，如果这个函数得到的结果为0，那么f(i)的结果就为0，那么探测到位置就不会变，这是<strong>灾难</strong>。所以这个函数的计算结果一定不能为0 。</p>
+<p>可以使用下面的：<br>$$<br>hash_2(x) = R -(x\mod R)\<br>R为小于tableSize的素数。<br>$$<br>使用双散列也要保证表的大小是素数，不然可能吧备选单元提前用完。</p>
+<h3 id="3-再散列"><a href="#3-再散列" class="headerlink" title="3.再散列"></a>3.再散列</h3><p>当填装因子达到一定的值的时候，如使用分离链接法达到1，使用开放地址法达到0.5，需要扩大散列表。</p>
+<p><strong>一种解决办法是</strong>：建立一个两倍大的表，并使用一个新的散列函数，扫描原始表，计算每个未删除的元素的新的散列值，并插入到新表中。</p>
+<p>假设一个散列表大小为7，解决冲突方法是分离链接法。，散列函数是<br>$$<br>hash(x) = x\mod 7<br>$$<br>向里面插入数据 13，15，24，6得到下面的表:</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/sjjg/hash2.png" alt=""></p>
+<p>然后在插入个23：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/sjjg/hash3.png" alt=""></p>
+<p>这是觉得表有点满了，将表扩大2倍。</p>
+<p>因为要让表的大小是素数，所以选择别7的二倍14还大的最接近的素数，17，新表的大小为17.</p>
+<p>将散列函数变为：<br>$$<br>hash(x) = x\mod 17<br>$$<br>插入到新表变成：</p>
+<p><img src="http://privateimage.oss-cn-hongkong.aliyuncs.com/sjjg/hash4.png" alt=""></p>
+<p>这个操作就叫<strong>再散列</strong>。虽然每次扩容的开销很大，但因为每次扩容都直接把容量翻倍了，所以在之后的插入中花费基本上是一个常数开销。</p>
+<p>实现再散列有多个方法：</p>
+<ul>
+<li>表满一半就开始再散列</li>
+<li>插入失败开始再散列</li>
+<li><strong>填装因子达到某一个值是开始再散列</strong></li>
+</ul>
+<h2 id="4-标准库中的散列表"><a href="#4-标准库中的散列表" class="headerlink" title="4.标准库中的散列表"></a>4.标准库中的散列表</h2><p>HashMap和HashSet通常使用分离链接散列实现的</p>
+<p>String的hashCode有一个重要优化，就是把散列值存储在String对象中，该值初始值为0 ，只用计算一次。</p>
+<p>可以避免昂贵的重新计算，这个技巧叫<strong>内存散列代码</strong>，是一种空间交换时间。</p>
+<p>之所以String可以这样，是因为String类是不可变的。</p>
+</div><div class="tags"><a href="/tags/数据结构/">数据结构</a></div><div class="post-share"></div><div class="post-nav"><a href="/2017/08/15/APP启动页背景颜色变化/" class="next">APP启动页背景颜色变化</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">Inhalte</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#散列"><span class="toc-text">散列</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-一般想法"><span class="toc-text">1.一般想法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-散列函数"><span class="toc-text">2.散列函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-解决冲突"><span class="toc-text">3.解决冲突</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-分离链接法"><span class="toc-text">1.分离链接法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#填装因子"><span class="toc-text">填装因子</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-开放定址法"><span class="toc-text">2.开放定址法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-线性探测法"><span class="toc-text">2.1 线性探测法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-平方探测法"><span class="toc-text">2.2 平方探测法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-双散列法"><span class="toc-text">2.3 双散列法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-再散列"><span class="toc-text">3.再散列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-标准库中的散列表"><span class="toc-text">4.标准库中的散列表</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/24/关于散列Hash的一点笔记/">关于散列Hash的一点笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/15/APP启动页背景颜色变化/">APP启动页背景颜色变化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/31/ArrayList和LinkedList的简单实现/">ArrayList和LinkedList的简单实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/20/Android-socket的基本使用，发送文字和图片以及心跳/">Android-socket的基本使用，发送文字和图片以及心跳</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/11/将带有jni的Eclipse项目导入AndroidStudio遇到的问题/">将带有jni的Eclipse项目导入AndroidStudio遇到的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/AVL树的旋转图解和简单实现/">AVL树的旋转图解和简单实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/07/查找二叉树的简单实现/">查找二叉树的简单实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/27/ADB常用命令/">ADB常用命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/Android解压中文乱码/">Android解压中文乱码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/23/通过轮廓简单实现一个圆图/">通过轮廓简单实现一个圆图</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> Tags</i></div><div class="tagcloud"><a href="/tags/多线程/" style="font-size: 15px;">多线程</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/动画/" style="font-size: 15px;">动画</a> <a href="/tags/工具/" style="font-size: 15px;">工具</a> <a href="/tags/文字识别/" style="font-size: 15px;">文字识别</a> <a href="/tags/数据结构/" style="font-size: 15px;">数据结构</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a> <a href="/tags/版本控制/" style="font-size: 15px;">版本控制</a> <a href="/tags/Kotlin/" style="font-size: 15px;">Kotlin</a> <a href="/tags/翻墙/" style="font-size: 15px;">翻墙</a> <a href="/tags/源码/" style="font-size: 15px;">源码</a> <a href="/tags/读书/" style="font-size: 15px;">读书</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> Archiv</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-you"> Blogroll</i></div><ul></ul><a href="http://blog.csdn.net/qq_25806863" title="csdn" target="_blank">csdn</a><ul></ul><a href="https://github.com/wangyisll" title="github" target="_blank">github</a><ul></ul><a href="http://www.jianshu.com/u/cb3133f5a1bd" title="简书" target="_blank">简书</a></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Sitemap</a> |  <a href="/atom.xml">RSS</a> |  <a href="/about/">Über</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">喵了个呜.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script></body></html>
